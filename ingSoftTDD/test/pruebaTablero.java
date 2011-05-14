@@ -11,18 +11,27 @@ public class pruebaTablero {
     @Test 
     public void tableroNuevoDebeEstarLlenoDeFichas()
     {
-        assertTrue(tablero.estaLlenoDeFichas());
+        assertEquals(0,tablero.cantidadCasillasVacias());
     }
     @Test
     public void tableroNodebeEstarLlenoSiHayHueco()
     {
         tablero.agregarHuecoDeInicio(1);
-        assertFalse(tablero.estaLlenoDeFichas());
+        assertEquals(1,tablero.cantidadCasillasVacias());
     }
     @Test
-    public void jugadorComeUnaFicha()//jugador mueve una ficha a una posicion vacia en el tablero comiendo asi una ficha
+    public void jugadorMueveUnaFichaTableroDebeTenerDosCasillasVacias()
     {
         tablero.agregarHuecoDeInicio(1);
         tablero.moverFicha(3,1);
+        assertEquals(2,tablero.cantidadCasillasVacias());
+    }
+    @Test
+    public void jugadorMueveFichaALugarInvalidoTableroDebeTenerUnaCasillaVacia()
+    {
+        tablero.agregarHuecoDeInicio(1);
+        tablero.moverFicha(3,2);
+        assertEquals(1,tablero.cantidadCasillasVacias());
+        System.out.println(tablero.convertirTableroEnString());
     }
 }

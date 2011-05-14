@@ -6,7 +6,8 @@ public class Casilla {
     
     private Integer numeroCasilla;
     private boolean ocupado;
-    private List<Integer> casillasMoverse=new ArrayList<Integer>();
+    private List<Integer> moverseACasillas=new ArrayList<Integer>();
+    private List<Integer> comerCasillas=new ArrayList<Integer>();
 
     public Casilla(int numeroCasilla) {
         this.numeroCasilla = numeroCasilla;
@@ -17,8 +18,8 @@ public class Casilla {
         return ocupado;
     }
 
-    boolean numeroCasillaEs(int casillaHueco) {
-        if(numeroCasilla==casillaHueco)
+    boolean numeroCasillaEs(int numerocasilla) {
+        if(this.numeroCasilla==numerocasilla)
             return true;
         else
             return false;
@@ -36,8 +37,27 @@ public class Casilla {
             return numeroCasilla.toString()+" V";
     }
 
-    void agregarCasillaALista(Integer casillaMover) {
-        casillasMoverse.add(casillaMover);
+    void agregarCasillaAListaMoverse(Integer casillaMover) {
+        moverseACasillas.add(casillaMover);
+    }
+
+    Integer obtenerNumeroCasilla() {
+        return numeroCasilla;
+    }
+
+    void ocupar() {
+        ocupado=true;
+    }
+
+    void agregarCasillaAListaComer(Integer casillaComer) {
+        comerCasillas.add(casillaComer);
+    }
+
+    int moverseA(int casillaDestino) {
+        if(moverseACasillas.contains(casillaDestino))
+            return comerCasillas.get(moverseACasillas.indexOf(casillaDestino));
+        else
+            return -1;
     }
     
 }

@@ -6,11 +6,13 @@ import java.util.List;
 class Tablero {
 
      //List <Casilla> casillas=new ArrayList<Casilla>();
-    private int limiteFilas=5;
-    private int limiteColumnas=5;
+    private int limiteFilas;
+    private int limiteColumnas;
     private Casilla matriz[][];
 
     public Tablero() {
+        limiteFilas=5;
+        limiteColumnas=5;
         matriz=new Casilla[limiteFilas][limiteColumnas];
         int casillaNueva=1;
         for (int fila = 0; fila < limiteFilas; fila++) {
@@ -20,104 +22,203 @@ class Tablero {
             }
             limiteColumnas--;
         }
+        limiteColumnas=5;
         crearListaCasillas();
     }
     
-    private void reestablecerLimiteColumna()
+    public int cantidadCasillasVacias()
     {
-        limiteColumnas=5;
-    }
-    
-    public boolean estaLlenoDeFichas()
-    {
-        boolean CasillaLlena=true;
-        reestablecerLimiteColumna();
+        int copiaLimiteColumnas=limiteColumnas;
+        Integer cantidadCasillasVacias=0;
         for (int fila = 0; fila < limiteFilas; fila++) {
-            for (int columna = 0; columna < limiteColumnas; columna++) {
-                CasillaLlena=matriz[fila][columna].estaOcupada();
-                if(!CasillaLlena)
-                {
-                    fila=limiteFilas;
-                    columna=limiteColumnas;
-                }
+            for (int columna = 0; columna < copiaLimiteColumnas; columna++) {
+                if(!matriz[fila][columna].estaOcupada())
+                    cantidadCasillasVacias++;
             }
-            limiteColumnas--;
+            copiaLimiteColumnas--;
         }
-        return CasillaLlena;
+        return cantidadCasillasVacias;
     }
 
     void agregarHuecoDeInicio(int casillaHueco) {
-        reestablecerLimiteColumna();
+        int copiaLimiteColumnas=limiteColumnas;
         for (int fila = 0; fila < limiteFilas; fila++) {
-            for (int columna = 0; columna < limiteColumnas; columna++) {
+            for (int columna = 0; columna < copiaLimiteColumnas; columna++) {
                 if(matriz[fila][columna].numeroCasillaEs(casillaHueco))
                 {
                     matriz[fila][columna].desocupar();
-                    columna=limiteColumnas;
+                    columna=copiaLimiteColumnas;
                     fila=limiteFilas;
                 }
             }
-            limiteColumnas--;
+            copiaLimiteColumnas--;
         }
     }
     
-    void mostrarTablero()
+    String convertirTableroEnString()
     {
-        reestablecerLimiteColumna();
+        int copiaLimiteColumnas=limiteColumnas;
+        String tableroAMostrar="";
         String espacioIncrementar="     ";
         String espacio="      ";
         for (int fila = 0; fila < limiteFilas; fila++) {
-            for (int columna = 0; columna < limiteColumnas; columna++) {
-                System.out.print(matriz[fila][columna].mostrarCasilla()+"       ");
+            for (int columna = 0; columna < copiaLimiteColumnas; columna++) {
+                tableroAMostrar+=matriz[fila][columna].mostrarCasilla()+espacio;
             }
-            limiteColumnas--;
-            System.out.println("\n");
-            System.out.print(espacioIncrementar);
+            copiaLimiteColumnas--;
+            tableroAMostrar+="\n"+espacioIncrementar;
             espacioIncrementar+=espacio;
         }
+        return tableroAMostrar;
     }
 
     void moverFicha(int casillaOrigen, int casillaDestino) {
-        reestablecerLimiteColumna();
-        if(casillaVacia(casillaOrigen) && !casillaVacia(casillaDestino))
+        int copiaLimiteColumnas=limiteColumnas;
+        if(casillaDestino>0 && casillaOrigen>0 && casillaDestino<=15 && casillaOrigen<=15)
         {
-            
+            if(!casillaVacia(casillaOrigen) && casillaVacia(casillaDestino))
+            {
+                for (int fila = 0; fila < limiteFilas; fila++) 
+                {
+                    for (int columna = 0; columna < copiaLimiteColumnas; columna++) {
+                        if(matriz[fila][columna].numeroCasillaEs(casillaOrigen))
+                        {
+                            if(matriz[fila][columna].moverseA(casillaDestino)!=-1)
+                            {
+                                if(ocuparCasilla(casillaDestino,matriz[fila][columna].moverseA(casillaDestino)))
+                                {
+                                    matriz[fila][columna].desocupar();
+                                }
+                            }
+                        }
+                    }
+                    copiaLimiteColumnas--;
+                }
+            }
         }
         
     }
 
     private boolean casillaVacia(int casillaAVerificar) {
-        boolean casillaVacia=false;
-        reestablecerLimiteColumna();
-        if(casillaAVerificar>0 && casillaAVerificar<=limiteFilas)
-        {
-            for (int fila = 0; fila < limiteFilas; fila++) {
-                for (int columna = 0; columna < limiteColumnas; columna++) {
-                    if(matriz[fila][columna].numeroCasillaEs(casillaAVerificar))
+        boolean casillaVacia=true;
+        int copiaLimiteColumnas=limiteColumnas;
+        for (int fila = 0; fila < limiteFilas; fila++) {
+            for (int columna = 0; columna < copiaLimiteColumnas; columna++) {
+                if(matriz[fila][columna].numeroCasillaEs(casillaAVerificar))
+                {
+                    if(matriz[fila][columna].estaOcupada())
                     {
-                        if(matriz[fila][columna].estaOcupada())
-                        {
-                            casillaVacia=true;
-                            columna=limiteColumnas;
-                            fila=limiteFilas;
-                        }
+                        casillaVacia=false;
+                        columna=copiaLimiteColumnas;
+                        fila=limiteFilas;
                     }
                 }
-                limiteColumnas--;
             }
+            copiaLimiteColumnas--;
         }
         return casillaVacia;
     }
 
     private void crearListaCasillas() {
+        
+        int copiaLimiteColumnas=limiteColumnas;
         for (int fila = 0; fila < limiteFilas; fila++) {
-            for (int columna = 0; columna < limiteColumnas; columna++) {
-                if(columna+2<limiteColumnas)
-                    matriz[fila][columna].agregarCasillaALista(columna+2);
-                if(columna-2>=0)
-                    matriz[fila][columna].agregarCasillaALista(columna-2);
+            for (int columna = 0; columna < copiaLimiteColumnas; columna++) {
+                if(posicionDentroTablero(columna+2,copiaLimiteColumnas-1))
+                {
+                    agregarCasillaMoverse(matriz[fila][columna],matriz[fila][columna+2].obtenerNumeroCasilla());
+                    agregarCasillaComer(matriz[fila][columna],matriz[fila][columna+1].obtenerNumeroCasilla());
+                }
+                if(posicionDentroTablero(0,columna-2))
+                {
+                    agregarCasillaMoverse(matriz[fila][columna],matriz[fila][columna-2].obtenerNumeroCasilla());
+                    agregarCasillaComer(matriz[fila][columna],matriz[fila][columna-1].obtenerNumeroCasilla());
+                }
+                if(posicionDentroTablero(fila+2, limiteFilas-1) && posicionDentroTablero(columna+2, copiaLimiteColumnas-1))
+                {
+                    agregarCasillaMoverse(matriz[fila][columna],matriz[fila+2][columna].obtenerNumeroCasilla());
+                    agregarCasillaComer(matriz[fila][columna],matriz[fila+1][columna].obtenerNumeroCasilla());
+                }
+                if(posicionDentroTablero(0, fila-2))
+                {
+                    agregarCasillaMoverse(matriz[fila][columna],matriz[fila-2][columna].obtenerNumeroCasilla());
+                    agregarCasillaComer(matriz[fila][columna],matriz[fila-1][columna].obtenerNumeroCasilla());
+                }
+                if(posicionDentroTablero(fila+2,limiteFilas-1) && posicionDentroTablero(0, columna-2))
+                {
+                    agregarCasillaMoverse(matriz[fila][columna],matriz[fila+2][columna-2].obtenerNumeroCasilla());
+                    agregarCasillaComer(matriz[fila][columna],matriz[fila+1][columna-1].obtenerNumeroCasilla());
+                }
+                if(posicionDentroTablero(0, fila-2) && posicionDentroTablero(columna+2, copiaLimiteColumnas-1))
+                {
+                    agregarCasillaMoverse(matriz[fila][columna],matriz[fila-2][columna+2].obtenerNumeroCasilla());
+                    agregarCasillaComer(matriz[fila][columna],matriz[fila-1][columna+1].obtenerNumeroCasilla());
+                }
             }
-            limiteColumnas--;
+            copiaLimiteColumnas--;
         }
     }
+
+    private boolean ocuparCasilla(int casillaDestino,int comerCasilla) {
+        int copiaLimiteColumnas=limiteColumnas;
+        for (int fila = 0; fila < limiteFilas; fila++) 
+        {
+            for (int columna = 0; columna < copiaLimiteColumnas; columna++) {
+                if(matriz[fila][columna].numeroCasillaEs(casillaDestino))
+                {
+                    if(matriz[fila][columna].estaOcupada())
+                        return false;
+                    else
+                    {
+                        if(desocuparCasilla(comerCasilla))
+                        {
+                            matriz[fila][columna].ocupar();
+                            return true;
+                        }
+                        else 
+                            return false;
+                    }
+                }
+            }
+            copiaLimiteColumnas--;
+        }
+        return false;
+    }
+
+    private boolean desocuparCasilla(int comerCasilla) {
+        int copiaLimiteColumnas=limiteColumnas;
+        for (int fila = 0; fila < limiteFilas; fila++) 
+        {
+            for (int columna = 0; columna < copiaLimiteColumnas; columna++) {
+                if(matriz[fila][columna].numeroCasillaEs(comerCasilla))
+                {
+                    if(matriz[fila][columna].estaOcupada())
+                    {
+                        matriz[fila][columna].desocupar();
+                        return true;
+                    }
+                    else
+                        return false;
+                }
+            }
+            copiaLimiteColumnas--;
+        }
+        return false;
+    }
+
+    private void agregarCasillaMoverse(Casilla casilla, Integer numeroCasillaDestino) {
+        casilla.agregarCasillaAListaMoverse(numeroCasillaDestino);
+    }
+
+    private void agregarCasillaComer(Casilla casilla, Integer casillaAComer) {
+        casilla.agregarCasillaAListaComer(casillaAComer);
+    }
+
+    private boolean posicionDentroTablero(int posicionEnTablero, int posicionLimite) {
+        if(posicionEnTablero<=posicionLimite)
+            return true;
+        else
+            return false;
+    }
+    
 }
