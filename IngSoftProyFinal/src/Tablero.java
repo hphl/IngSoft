@@ -7,13 +7,13 @@ import java.util.List;
 class Tablero {
     private int limiteFilas;
     private int limiteColumnas;
-    private boolean matriz[][];
+    private boolean matrizCasillas[][];
     List <Casilla> casillas=new ArrayList<Casilla>();
 
     public Tablero() {
         limiteFilas=5;
         limiteColumnas=5;
-        matriz=new boolean[limiteFilas][limiteColumnas];
+        matrizCasillas=new boolean[limiteFilas][limiteColumnas];
         crearDatos(limiteColumnas);
     }
 
@@ -27,7 +27,7 @@ class Tablero {
     private void crearDatos(int limiteColumnas) {
         for (int fila = 0; fila < limiteFilas; fila++) {
             for (int columna = 0; columna < limiteColumnas; columna++) {
-                matriz[fila][columna]=true;
+                matrizCasillas[fila][columna]=true;
                 casillas.add(new Casilla(fila,columna));
             } 
             limiteColumnas--;
@@ -40,7 +40,7 @@ class Tablero {
         int copiaLimiteColumnas=limiteColumnas;
         for (int fila = 0; fila < limiteFilas; fila++) {
             for (int columna = 0; columna < copiaLimiteColumnas; columna++) {
-                if(matriz[fila][columna])
+                if(matrizCasillas[fila][columna])
                     cantidadCasillasVacias--;
             }
             copiaLimiteColumnas--;
@@ -53,7 +53,7 @@ class Tablero {
         {
             int fila=casillas.get(huecoInicial).obtenerFila();
             int columna=casillas.get(huecoInicial).obtenerColumna();
-            matriz[fila][columna]=false;
+            matrizCasillas[fila][columna]=false;
             return true;
         }
         else
@@ -73,7 +73,7 @@ class Tablero {
         int fila=casillas.get(casilla).obtenerFila();
         int columna=casillas.get(casilla).obtenerColumna();
         
-        return matriz[fila][columna];
+        return matrizCasillas[fila][columna];
     }
 
     private boolean tratarDeMover(int casillaOrigen, int casillaDestino) {
@@ -82,61 +82,61 @@ class Tablero {
         Casilla casillaDestiny=casillas.get(casillaDestino);
         if(casillaDestiny.esIgual(filaOrigen+2,columnaOrigen))
         {
-            if(matriz[filaOrigen+1][columnaOrigen])
+            if(matrizCasillas[filaOrigen+1][columnaOrigen])
             {
-                matriz[filaOrigen+1][columnaOrigen]=false;
-                matriz[filaOrigen+2][columnaOrigen]=true;
-                matriz[filaOrigen][columnaOrigen]=false;
+                matrizCasillas[filaOrigen+1][columnaOrigen]=false;
+                matrizCasillas[filaOrigen+2][columnaOrigen]=true;
+                matrizCasillas[filaOrigen][columnaOrigen]=false;
                 return true;
             }
         }
         else if(casillaDestiny.esIgual(filaOrigen-2, columnaOrigen))
         {
-            if(matriz[filaOrigen-1][columnaOrigen])
+            if(matrizCasillas[filaOrigen-1][columnaOrigen])
             {
-                matriz[filaOrigen][columnaOrigen]=false;
-                matriz[filaOrigen-1][columnaOrigen]=false;
-                matriz[filaOrigen-2][columnaOrigen]=true;
+                matrizCasillas[filaOrigen][columnaOrigen]=false;
+                matrizCasillas[filaOrigen-1][columnaOrigen]=false;
+                matrizCasillas[filaOrigen-2][columnaOrigen]=true;
                 return true;
             }
         }
         else if(casillaDestiny.esIgual(filaOrigen, columnaOrigen+2))
         {
-            if(matriz[filaOrigen][columnaOrigen+1])
+            if(matrizCasillas[filaOrigen][columnaOrigen+1])
             {
-                matriz[filaOrigen][columnaOrigen]=false;
-                matriz[filaOrigen][columnaOrigen+1]=false;
-                matriz[filaOrigen][columnaOrigen+2]=true;
+                matrizCasillas[filaOrigen][columnaOrigen]=false;
+                matrizCasillas[filaOrigen][columnaOrigen+1]=false;
+                matrizCasillas[filaOrigen][columnaOrigen+2]=true;
                 return true;
             }
         }
         else if(casillaDestiny.esIgual(filaOrigen, columnaOrigen-2))
         {
-            if(matriz[filaOrigen][columnaOrigen-1])
+            if(matrizCasillas[filaOrigen][columnaOrigen-1])
             {
-                matriz[filaOrigen][columnaOrigen]=false;
-                matriz[filaOrigen][columnaOrigen-1]=false;
-                matriz[filaOrigen][columnaOrigen-2]=true;
+                matrizCasillas[filaOrigen][columnaOrigen]=false;
+                matrizCasillas[filaOrigen][columnaOrigen-1]=false;
+                matrizCasillas[filaOrigen][columnaOrigen-2]=true;
                 return true;
             }
         }
         else if(casillaDestiny.esIgual(filaOrigen+2, columnaOrigen-2))
         {
-            if(matriz[filaOrigen+1][columnaOrigen-1])
+            if(matrizCasillas[filaOrigen+1][columnaOrigen-1])
             {
-                matriz[filaOrigen][columnaOrigen]=false;
-                matriz[filaOrigen+1][columnaOrigen-1]=false;
-                matriz[filaOrigen+2][columnaOrigen-2]=true;
+                matrizCasillas[filaOrigen][columnaOrigen]=false;
+                matrizCasillas[filaOrigen+1][columnaOrigen-1]=false;
+                matrizCasillas[filaOrigen+2][columnaOrigen-2]=true;
                 return true;
             }
         }
         else if(casillaDestiny.esIgual(filaOrigen-2, columnaOrigen+2))
         {
-            if(matriz[filaOrigen-1][columnaOrigen+1])
+            if(matrizCasillas[filaOrigen-1][columnaOrigen+1])
             {
-                matriz[filaOrigen][columnaOrigen]=false;
-                matriz[filaOrigen-1][columnaOrigen+1]=false;
-                matriz[filaOrigen-2][columnaOrigen+2]=true;
+                matrizCasillas[filaOrigen][columnaOrigen]=false;
+                matrizCasillas[filaOrigen-1][columnaOrigen+1]=false;
+                matrizCasillas[filaOrigen-2][columnaOrigen+2]=true;
                 return true;
             }
         }
@@ -153,7 +153,7 @@ class Tablero {
             int fila=casillas.get(numeroCasilla).obtenerFila();
             int columna=casillas.get(numeroCasilla).obtenerColumna();
             tablero+=numeroCasilla+1;
-            if(matriz[fila][columna])
+            if(matrizCasillas[fila][columna])
                 tablero+="-Ocu   ";
             else
                 tablero+="-Vac   ";
