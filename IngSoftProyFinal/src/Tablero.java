@@ -142,5 +142,31 @@ class Tablero {
         }
         return false;
     }
+
+    String mostrarTablero() {
+        String tablero="";
+        String espacio="  ";
+        String espacioBase="     ";
+        int limiteColumnas=this.limiteColumnas-1;
+        int contadorColumnaLimite=0;
+        for (int numeroCasilla = 0; numeroCasilla < casillas.size(); numeroCasilla++) {
+            int fila=casillas.get(numeroCasilla).obtenerFila();
+            int columna=casillas.get(numeroCasilla).obtenerColumna();
+            tablero+=numeroCasilla+1;
+            if(matriz[fila][columna])
+                tablero+="-Ocu   ";
+            else
+                tablero+="-Vac   ";
+            if(!(numeroCasilla<limiteColumnas))
+            {
+               tablero+="\n\n"+espacioBase;
+               espacio+=" ";
+               espacioBase+=espacio;
+               contadorColumnaLimite++;
+               limiteColumnas+=this.limiteColumnas-contadorColumnaLimite;
+            }
+        }
+        return tablero;
+    }
     
 }
