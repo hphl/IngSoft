@@ -53,7 +53,14 @@ public class PruebaTablero {
     }
     
     @Test
-    public void jugadorMueveFichaOrigenValidaADestinoValidoPeroMoviemientoInvalido()
+    public void jugadorMueveFichaCorrectamente()
+    {
+        tablero.agregarHuecoDeInicio(1);
+        assertTrue(tablero.moverFicha(3, 1));
+    }
+    
+    @Test
+    public void jugadorMueveFichaOrigenValidaADestinoValidoPeroMovimientoInvalido()
     {
         tablero.agregarHuecoDeInicio(1);
         assertFalse(tablero.moverFicha(3,2));
