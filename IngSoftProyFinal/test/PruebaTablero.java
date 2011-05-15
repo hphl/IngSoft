@@ -1,4 +1,5 @@
 
+import ingsoftproyfinal.*;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -47,9 +48,15 @@ public class PruebaTablero {
     }
     
     @Test
-    public void jugadorMueveFichaOrigenValidaADestinoInvalido()
+    public void jugadorMueveFichaOrigenValidaADestinoValidoPeroMoviemientoInvalido()
     {
         tablero.agregarHuecoDeInicio(1);
         assertFalse(tablero.moverFicha(3,2));
+    }
+    
+    @Test public void jugadorMueveFichaOrigenInvalidaADestinoValido()
+    {
+        tablero.agregarHuecoDeInicio(1);
+        assertFalse(tablero.moverFicha(-1, 1));
     }
 }

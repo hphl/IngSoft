@@ -1,4 +1,6 @@
 
+
+
 class Casilla {
     private int fila;
     private int columna;
