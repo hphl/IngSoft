@@ -1,5 +1,4 @@
 
-import ingsoftproyfinal.*;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -27,11 +26,17 @@ public class PruebaTablero {
         assertFalse(tablero.agregarHuecoDeInicio(15));
     }
     @Test
-    public void jugadorIndicaHuecoTableroNoDebeEstarLleno(){
+    public void jugadorIndicaHuecoValidoTableroNoDebeEstarLleno(){
         tablero.agregarHuecoDeInicio(1);
         assertEquals(1,tablero.cantidadCasillasVacias());
     }
     
+    @Test 
+    public void jugadorIndicaHuecoInvalidoTableroDebeEstarLleno()
+    {
+        tablero.agregarHuecoDeInicio(15);
+        assertEquals(0,tablero.cantidadCasillasVacias());
+    }
     @Test
     public void jugadorIndicaHuecoEsaCasillaDebeEstarVacia()
     {
