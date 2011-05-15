@@ -79,6 +79,7 @@ class Tablero {
     private boolean tratarDeMover(int casillaOrigen, int casillaDestino) {
         int filaOrigen=casillas.get(casillaOrigen).obtenerFila();
         int columnaOrigen=casillas.get(casillaOrigen).obtenerColumna();
+        boolean seMovio=true;
         Casilla casillaDestiny=casillas.get(casillaDestino);
         if(casillaDestiny.esIgual(filaOrigen+2,columnaOrigen))
         {
@@ -87,7 +88,6 @@ class Tablero {
                 matrizCasillas[filaOrigen+1][columnaOrigen]=false;
                 matrizCasillas[filaOrigen+2][columnaOrigen]=true;
                 matrizCasillas[filaOrigen][columnaOrigen]=false;
-                return true;
             }
         }
         else if(casillaDestiny.esIgual(filaOrigen-2, columnaOrigen))
@@ -97,7 +97,6 @@ class Tablero {
                 matrizCasillas[filaOrigen][columnaOrigen]=false;
                 matrizCasillas[filaOrigen-1][columnaOrigen]=false;
                 matrizCasillas[filaOrigen-2][columnaOrigen]=true;
-                return true;
             }
         }
         else if(casillaDestiny.esIgual(filaOrigen, columnaOrigen+2))
@@ -107,7 +106,6 @@ class Tablero {
                 matrizCasillas[filaOrigen][columnaOrigen]=false;
                 matrizCasillas[filaOrigen][columnaOrigen+1]=false;
                 matrizCasillas[filaOrigen][columnaOrigen+2]=true;
-                return true;
             }
         }
         else if(casillaDestiny.esIgual(filaOrigen, columnaOrigen-2))
@@ -117,7 +115,6 @@ class Tablero {
                 matrizCasillas[filaOrigen][columnaOrigen]=false;
                 matrizCasillas[filaOrigen][columnaOrigen-1]=false;
                 matrizCasillas[filaOrigen][columnaOrigen-2]=true;
-                return true;
             }
         }
         else if(casillaDestiny.esIgual(filaOrigen+2, columnaOrigen-2))
@@ -127,7 +124,6 @@ class Tablero {
                 matrizCasillas[filaOrigen][columnaOrigen]=false;
                 matrizCasillas[filaOrigen+1][columnaOrigen-1]=false;
                 matrizCasillas[filaOrigen+2][columnaOrigen-2]=true;
-                return true;
             }
         }
         else if(casillaDestiny.esIgual(filaOrigen-2, columnaOrigen+2))
@@ -137,10 +133,11 @@ class Tablero {
                 matrizCasillas[filaOrigen][columnaOrigen]=false;
                 matrizCasillas[filaOrigen-1][columnaOrigen+1]=false;
                 matrizCasillas[filaOrigen-2][columnaOrigen+2]=true;
-                return true;
             }
         }
-        return false;
+        else
+            seMovio=false;
+        return seMovio;
     }
 
     String mostrarTablero() {
