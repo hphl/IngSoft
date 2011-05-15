@@ -54,9 +54,17 @@ public class PruebaTablero {
         assertFalse(tablero.moverFicha(3,2));
     }
     
-    @Test public void jugadorMueveFichaOrigenInvalidaADestinoValido()
+    @Test 
+    public void jugadorMueveFichaOrigenInvalidaADestinoValido()
     {
         tablero.agregarHuecoDeInicio(1);
         assertFalse(tablero.moverFicha(-1, 1));
+    }
+    
+    @Test 
+    public void jugadorMueveFichaOrigenValidaADestinoInvalido()
+    {
+        tablero.agregarHuecoDeInicio(1);
+        assertFalse(tablero.moverFicha(3, -1));
     }
 }
