@@ -14,7 +14,6 @@ public class IngSoftProyFinal {
         
         boolean continuar=true;
         Tablero tablero=new Tablero();
-        //int option=0;
         String option="";
         String numeroCasillaUno;
         
@@ -74,15 +73,23 @@ public class IngSoftProyFinal {
                     break;
                     
                 case 2:
+                    if(tablero.cantidadCasillasVacias()!=14)
+                    {
                         System.out.print(lineas+"\nIngrese la casilla Origen: ");
                         casillaOrigen = in.next();
                         System.out.print("\nIngrese la casilla destino: ");
                         casillaDestino = in.next();
                         if(tablero.moverFicha(esNumero(casillaOrigen)-1, esNumero(casillaDestino)-1))
                             System.out.println("\nComando:"+casillaOrigen+" a "+casillaDestino+"\n"+tablero.mostrarTablero()+"\n"+lineas);
+                        else
+                            System.out.println("\nNo se pudo ejecutar el comando\n"+tablero.mostrarTablero()+"\n"+lineas);
+                    }
                     else
-                        System.out.println("\nNo se pudo ejecutar el comando\n"+tablero.mostrarTablero()+"\n"+lineas);
-                    
+                    {
+                        System.out.println("GANASTE\n presione una tecla para volver al menu principal");
+                        option=in.next();
+                        seguirJugando=false;
+                    }
                     break;
                     
                 default:

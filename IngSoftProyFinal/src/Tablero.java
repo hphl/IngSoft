@@ -1,8 +1,6 @@
 
-
 import java.util.ArrayList;
 import java.util.List;
-
 
 class Tablero {
     private int limiteFilas;
@@ -80,63 +78,15 @@ class Tablero {
         int filaOrigen=casillas.get(casillaOrigen).obtenerFila();
         int columnaOrigen=casillas.get(casillaOrigen).obtenerColumna();
         boolean seMovio=true;
-        Casilla casillaDestiny=casillas.get(casillaDestino);
-        if(casillaDestiny.esIgual(filaOrigen+2,columnaOrigen))
+        Casilla destinoCasilla=casillas.get(casillaDestino);
+        if(!(moverEnFila(filaOrigen,columnaOrigen,destinoCasilla)))
         {
-            if(matrizCasillas[filaOrigen+1][columnaOrigen])
+            if(!(moverEnColumna(filaOrigen,columnaOrigen,destinoCasilla)))
             {
-                matrizCasillas[filaOrigen+1][columnaOrigen]=false;
-                matrizCasillas[filaOrigen+2][columnaOrigen]=true;
-                matrizCasillas[filaOrigen][columnaOrigen]=false;
+                if(!(moverEnDiagonal(filaOrigen,columnaOrigen,destinoCasilla)))
+                    seMovio=false;
             }
         }
-        else if(casillaDestiny.esIgual(filaOrigen-2, columnaOrigen))
-        {
-            if(matrizCasillas[filaOrigen-1][columnaOrigen])
-            {
-                matrizCasillas[filaOrigen][columnaOrigen]=false;
-                matrizCasillas[filaOrigen-1][columnaOrigen]=false;
-                matrizCasillas[filaOrigen-2][columnaOrigen]=true;
-            }
-        }
-        else if(casillaDestiny.esIgual(filaOrigen, columnaOrigen+2))
-        {
-            if(matrizCasillas[filaOrigen][columnaOrigen+1])
-            {
-                matrizCasillas[filaOrigen][columnaOrigen]=false;
-                matrizCasillas[filaOrigen][columnaOrigen+1]=false;
-                matrizCasillas[filaOrigen][columnaOrigen+2]=true;
-            }
-        }
-        else if(casillaDestiny.esIgual(filaOrigen, columnaOrigen-2))
-        {
-            if(matrizCasillas[filaOrigen][columnaOrigen-1])
-            {
-                matrizCasillas[filaOrigen][columnaOrigen]=false;
-                matrizCasillas[filaOrigen][columnaOrigen-1]=false;
-                matrizCasillas[filaOrigen][columnaOrigen-2]=true;
-            }
-        }
-        else if(casillaDestiny.esIgual(filaOrigen+2, columnaOrigen-2))
-        {
-            if(matrizCasillas[filaOrigen+1][columnaOrigen-1])
-            {
-                matrizCasillas[filaOrigen][columnaOrigen]=false;
-                matrizCasillas[filaOrigen+1][columnaOrigen-1]=false;
-                matrizCasillas[filaOrigen+2][columnaOrigen-2]=true;
-            }
-        }
-        else if(casillaDestiny.esIgual(filaOrigen-2, columnaOrigen+2))
-        {
-            if(matrizCasillas[filaOrigen-1][columnaOrigen+1])
-            {
-                matrizCasillas[filaOrigen][columnaOrigen]=false;
-                matrizCasillas[filaOrigen-1][columnaOrigen+1]=false;
-                matrizCasillas[filaOrigen-2][columnaOrigen+2]=true;
-            }
-        }
-        else
-            seMovio=false;
         return seMovio;
     }
 
@@ -164,6 +114,81 @@ class Tablero {
             }
         }
         return tablero;
+    }
+
+    private boolean moverEnColumna(int filaOrigen, int columnaOrigen,Casilla casillaDestino) {
+        boolean seMovio=true;
+        if(casillaDestino.esIgual(filaOrigen+2,columnaOrigen))
+        {
+            if(matrizCasillas[filaOrigen+1][columnaOrigen])
+            {
+                matrizCasillas[filaOrigen+1][columnaOrigen]=false;
+                matrizCasillas[filaOrigen+2][columnaOrigen]=true;
+                matrizCasillas[filaOrigen][columnaOrigen]=false;
+            }
+        }
+        else if(casillaDestino.esIgual(filaOrigen-2, columnaOrigen))
+        {
+            if(matrizCasillas[filaOrigen-1][columnaOrigen])
+            {
+                matrizCasillas[filaOrigen][columnaOrigen]=false;
+                matrizCasillas[filaOrigen-1][columnaOrigen]=false;
+                matrizCasillas[filaOrigen-2][columnaOrigen]=true;
+            }
+        }
+        else
+            seMovio=false;
+        return seMovio;
+    }
+
+    private boolean moverEnFila(int filaOrigen, int columnaOrigen, Casilla destinoCasilla) {
+        boolean seMovio=true;
+        if(destinoCasilla.esIgual(filaOrigen, columnaOrigen+2))
+        {
+            if(matrizCasillas[filaOrigen][columnaOrigen+1])
+            {
+                matrizCasillas[filaOrigen][columnaOrigen]=false;
+                matrizCasillas[filaOrigen][columnaOrigen+1]=false;
+                matrizCasillas[filaOrigen][columnaOrigen+2]=true;
+            }
+        }
+        else if(destinoCasilla.esIgual(filaOrigen, columnaOrigen-2))
+        {
+            if(matrizCasillas[filaOrigen][columnaOrigen-1])
+            {
+                matrizCasillas[filaOrigen][columnaOrigen]=false;
+                matrizCasillas[filaOrigen][columnaOrigen-1]=false;
+                matrizCasillas[filaOrigen][columnaOrigen-2]=true;
+            }
+        }
+        else
+            seMovio=false;
+        return seMovio;
+    }
+
+    private boolean moverEnDiagonal(int filaOrigen, int columnaOrigen, Casilla destinoCasilla) {
+        boolean seMovio=true;
+        if(destinoCasilla.esIgual(filaOrigen+2, columnaOrigen-2))
+        {
+            if(matrizCasillas[filaOrigen+1][columnaOrigen-1])
+            {
+                matrizCasillas[filaOrigen][columnaOrigen]=false;
+                matrizCasillas[filaOrigen+1][columnaOrigen-1]=false;
+                matrizCasillas[filaOrigen+2][columnaOrigen-2]=true;
+            }
+        }
+        else if(destinoCasilla.esIgual(filaOrigen-2, columnaOrigen+2))
+        {
+            if(matrizCasillas[filaOrigen-1][columnaOrigen+1])
+            {
+                matrizCasillas[filaOrigen][columnaOrigen]=false;
+                matrizCasillas[filaOrigen-1][columnaOrigen+1]=false;
+                matrizCasillas[filaOrigen-2][columnaOrigen+2]=true;
+            }
+        }
+        else
+            seMovio=false;
+        return seMovio;
     }
     
 }
