@@ -10,8 +10,7 @@ public class PruebaCasilla {
     }
     
     @Test 
-    public void casillaConValoresDistintosACeroDebeSerDistintoDeFilaCeroColumnaCero()
-    {
+    public void casillaConValoresDistintosACeroDebeSerDistintoDeFilaCeroColumnaCero(){
         assertFalse(casilla.esIgual(0, 0));
     }
     
@@ -29,5 +28,11 @@ public class PruebaCasilla {
     public void casillaConColumnaTresDebeDevolverColumnaIgualATres(){
         assertEquals(3,casilla.obtenerColumna());
     }
+    
+    @Test 
+    public void casillaNuevaSinPosicionNoDebeEstarSinColor(){
+        assertNotSame("",casilla.obtenerColor());
+    }
+            
     
 }

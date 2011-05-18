@@ -52,6 +52,7 @@ class Tablero {
             int fila=casillas.get(huecoInicial).obtenerFila();
             int columna=casillas.get(huecoInicial).obtenerColumna();
             matrizCasillas[fila][columna]=false;
+            casillas.get(huecoInicial).vacio();
             return true;
         }
         else
@@ -62,7 +63,12 @@ class Tablero {
         if(casillaEstaDentroTablero(casillaOrigen) && casillaEstaDentroTablero(casillaDestino))
         {
             if(!casillaOcupada(casillaDestino) && casillaOcupada(casillaOrigen))
-                return tratarDeMover(casillaOrigen,casillaDestino);
+                if(tratarDeMover(casillaOrigen,casillaDestino))
+                {
+                    casillas.get(casillaDestino).colocarNuevaFicha(casillas.get(casillaOrigen).obtenerColor());
+                    casillas.get(casillaOrigen).vacio();
+                    return true;
+                }
         }
         return false;
     }
@@ -84,7 +90,7 @@ class Tablero {
             if(!(moverEnColumna(filaOrigen,columnaOrigen,destinoCasilla)))
             {
                 if(!(moverEnDiagonal(filaOrigen,columnaOrigen,destinoCasilla)))
-                    seMovio=false;
+                    seMovio=false;             
             }
         }
         return seMovio;
@@ -106,9 +112,9 @@ class Tablero {
                 lineaNumeros+=" ";
             lineaNumeros+=numeroCasilla+1+"    ";
             if(matrizCasillas[fila][columna])
-                lineaColores+=crearColor();
+                lineaColores+=casillas.get(numeroCasilla).obtenerColor();
             else
-                lineaColores+="O   ";
+                lineaColores+=" O    ";
             if(!(numeroCasilla<copiaLimiteColumnas))
             {
                 tablero+=espacioBase+lineaColores+"\n"+espacioBase+lineaNumeros+"\n\n";
@@ -197,26 +203,4 @@ class Tablero {
         return seMovio;
     }
     
-    public String crearColor()
-    {       
-        int numero=0;
-        String cadenaADevolver="";
-        do {
-            numero=(int) Math.round((Math.random()*10)); 
-        } while (numero>2);
-        switch(numero+1)
-        {
-            case 1:
-                cadenaADevolver= " R    ";
-                break;
-            case 2:
-                cadenaADevolver= " B    ";
-                break;
-            case 3:
-                cadenaADevolver= " A    ";
-                break;
-        }
-        return cadenaADevolver;
-        
-    }
 }
