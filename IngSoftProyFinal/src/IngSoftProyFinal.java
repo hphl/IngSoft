@@ -28,7 +28,7 @@ public class IngSoftProyFinal {
             {
                 case 1:
                     tablero=new Tablero();
-                    System.out.println("Ocu=Ocupado\nVac=Vacio\n"+tablero.mostrarTablero());  
+                    System.out.println("R,B,A=Ocupado\nO=Vacio\n"+tablero.mostrarTablero());  
                     System.out.println("para iniciar el juego debe de ingresar una posicion del tablero para que sea un vacio (ejemplo:3)");
                     numeroCasillaUno = in.next();
                     if(tablero.agregarHuecoDeInicio(esNumero(numeroCasillaUno)-1))
@@ -55,7 +55,7 @@ public class IngSoftProyFinal {
         String casillaDestino;
         String casillaOrigen;
         
-        System.out.println(lineas+"\nOcu=Ocupado\nVac=Vacio\n"+tablero.mostrarTablero());  
+        System.out.println(lineas+"\nR,B,A=Ocupado\nO=Vacio\n"+tablero.mostrarTablero());  
         
         while (seguirJugando)
         {

@@ -91,26 +91,32 @@ class Tablero {
     }
 
     String mostrarTablero() {
+        String lineaNumeros="";
+        String lineaColores="";
         String tablero="";
         String espacio="  ";
-        String espacioBase="     ";
-        int limiteColumnas=this.limiteColumnas-1;
+        String espacioBase="         ";
+        int copiaLimiteColumnas=this.limiteColumnas-1;
         int contadorColumnaLimite=0;
+        
         for (int numeroCasilla = 0; numeroCasilla < casillas.size(); numeroCasilla++) {
             int fila=casillas.get(numeroCasilla).obtenerFila();
             int columna=casillas.get(numeroCasilla).obtenerColumna();
-            tablero+=numeroCasilla+1;
+            if(numeroCasilla<9)
+                lineaNumeros+=" ";
+            lineaNumeros+=numeroCasilla+1+"    ";
             if(matrizCasillas[fila][columna])
-                tablero+="-Ocu   ";
+                lineaColores+=crearColor();
             else
-                tablero+="-Vac   ";
-            if(!(numeroCasilla<limiteColumnas))
+                lineaColores+="O   ";
+            if(!(numeroCasilla<copiaLimiteColumnas))
             {
-               tablero+="\n\n"+espacioBase;
-               espacio+=" ";
-               espacioBase+=espacio;
-               contadorColumnaLimite++;
-               limiteColumnas+=this.limiteColumnas-contadorColumnaLimite;
+                tablero+=espacioBase+lineaColores+"\n"+espacioBase+lineaNumeros+"\n\n";
+                espacioBase+=espacio;
+                contadorColumnaLimite++;
+                copiaLimiteColumnas+=this.limiteColumnas-contadorColumnaLimite;
+                lineaNumeros="";
+                lineaColores="";
             }
         }
         return tablero;
@@ -191,4 +197,26 @@ class Tablero {
         return seMovio;
     }
     
+    public String crearColor()
+    {       
+        int numero=0;
+        String cadenaADevolver="";
+        do {
+            numero=(int) Math.round((Math.random()*10)); 
+        } while (numero>2);
+        switch(numero+1)
+        {
+            case 1:
+                cadenaADevolver= " R    ";
+                break;
+            case 2:
+                cadenaADevolver= " B    ";
+                break;
+            case 3:
+                cadenaADevolver= " A    ";
+                break;
+        }
+        return cadenaADevolver;
+        
+    }
 }
