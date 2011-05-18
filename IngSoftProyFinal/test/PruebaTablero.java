@@ -15,14 +15,12 @@ public class PruebaTablero {
     }
     
     @Test
-    public void jugadorInidicaHuecoValido()
-    {
+    public void jugadorInidicaHuecoValido(){
         assertTrue(tablero.agregarHuecoDeInicio(1));
     }
     
     @Test
-    public void jugadorIndicaHuecoInvalido()
-    {
+    public void jugadorIndicaHuecoInvalido(){
         assertFalse(tablero.agregarHuecoDeInicio(15));
     }
     @Test
@@ -32,108 +30,129 @@ public class PruebaTablero {
     }
     
     @Test 
-    public void jugadorIndicaHuecoInvalidoTableroDebeEstarLleno()
-    {
+    public void jugadorIndicaHuecoInvalidoTableroDebeEstarLleno(){
         tablero.agregarHuecoDeInicio(15);
         assertEquals(0,tablero.cantidadCasillasVacias());
     }
     @Test
-    public void jugadorIndicaHuecoEsaCasillaDebeEstarVacia()
-    {
+    public void jugadorIndicaHuecoEsaCasillaDebeEstarVacia(){
         tablero.agregarHuecoDeInicio(1);
         assertFalse(tablero.casillaOcupada(1));
     }
     
     @Test
-    public void jugadorMueveFichaCorrectamenteTableroDebeTenerDosCasillasVacias()
-    {
+    public void jugadorMueveFichaCorrectamenteTableroDebeTenerDosCasillasVacias(){
         tablero.agregarHuecoDeInicio(1);
         tablero.moverFicha(3,1);
         assertEquals(2,tablero.cantidadCasillasVacias());
     }
     
     @Test
-    public void jugadorMueveFichaCorrectamente()
-    {
+    public void jugadorMueveFichaCorrectamente(){
         tablero.agregarHuecoDeInicio(1);
         assertTrue(tablero.moverFicha(3, 1));
     }
     
     @Test
-    public void jugadorMueveFichaOrigenValidaADestinoValidoPeroMovimientoInvalido()
-    {
+    public void jugadorMueveFichaOrigenValidaADestinoValidoPeroMovimientoInvalido(){
         tablero.agregarHuecoDeInicio(1);
         assertFalse(tablero.moverFicha(3,2));
     }
     
     @Test 
-    public void jugadorMueveFichaOrigenInvalidaADestinoValido()
-    {
+    public void jugadorMueveFichaOrigenInvalidaADestinoValido(){
         
         tablero.agregarHuecoDeInicio(1);
         assertFalse(tablero.moverFicha(-1, 1));
     }
     
     @Test 
-    public void jugadorMueveFichaOrigenValidaADestinoInvalido()
-    {
+    public void jugadorMueveFichaOrigenValidaADestinoInvalido(){
         tablero.agregarHuecoDeInicio(1);
         assertFalse(tablero.moverFicha(3, -1));
     }
     
     @Test 
-    public void mostrarTableroInicialDebeSerStringDistintoAVacio()
-    {
-        assertNotSame("",tablero.mostrarTablero());
-        
-    }
-    
-    @Test 
-    public void jugadorMueveFichaValidaEnLineaRectaALaDerecha()
-    {
+    public void jugadorMueveFichaValidaEnLineaRectaALaDerecha(){
         tablero.agregarHuecoDeInicio(3);
         tablero.moverFicha(1,3);
         assertEquals(2,tablero.cantidadCasillasVacias());
     }
     
     @Test 
-    public void jugadorMueveFichaValidaEnLineaRectaALaIzquierda()
-    {
+    public void jugadorMueveFichaValidaEnLineaRectaALaIzquierda(){
         tablero.agregarHuecoDeInicio(1);
         tablero.moverFicha(3,1);
         assertEquals(2,tablero.cantidadCasillasVacias());
     }
     
     @Test 
-    public void jugadorMueveFichaValidaEnDiagonalDerechaHaciaAbajo()
-    {
+    public void jugadorMueveFichaValidaEnDiagonalDerechaHaciaAbajo(){
         tablero.agregarHuecoDeInicio(10);
         tablero.moverFicha(1,10);
         assertEquals(2,tablero.cantidadCasillasVacias());
     }
     
     @Test 
-    public void jugadorMueveFichaValidaEnDiagonalIzquierdaHaciaArriba()
-    {
+    public void jugadorMueveFichaValidaEnDiagonalIzquierdaHaciaArriba(){
         tablero.agregarHuecoDeInicio(1);
         tablero.moverFicha(10,1);
         assertEquals(2,tablero.cantidadCasillasVacias());
     }
     
     @Test 
-    public void jugadorMueveFichaValidaEnDiagonalIzquierdaHaciaAbajo()
-    {
+    public void jugadorMueveFichaValidaEnDiagonalIzquierdaHaciaAbajo(){
         tablero.agregarHuecoDeInicio(10);
         tablero.moverFicha(3,10);
         assertEquals(2,tablero.cantidadCasillasVacias());
     }
     
     @Test 
-    public void jugadorMueveFichaValidaEnDiagonalDerechaHaciaArriba()
-    {
+    public void jugadorMueveFichaValidaEnDiagonalDerechaHaciaArriba(){
         tablero.agregarHuecoDeInicio(3);
         tablero.moverFicha(10,3);
         assertEquals(2,tablero.cantidadCasillasVacias());
+    }
+        
+    @Test 
+    public void mostrarTableroInicialDebeSerStringDistintoAVacio(){
+        assertNotSame("",tablero.mostrarTablero());
+        System.out.println(tablero.mostrarTablero());
+    }
+    
+    @Test 
+    public void jugadorNoTieneMasJugadasDisponibles(){
+        tablero.agregarHuecoDeInicio(1);
+        tablero.moverFicha(3, 1);
+        tablero.moverFicha(9, 2);
+        tablero.moverFicha(1, 3);
+        tablero.moverFicha(0, 9);
+        tablero.moverFicha(12, 5);
+        tablero.moverFicha(4, 2);
+        tablero.moverFicha(11, 9);
+        tablero.moverFicha(8, 6);
+        tablero.moverFicha(5,12);
+        tablero.moverFicha(2,9);
+        tablero.moverFicha(12, 5);
+        tablero.moverFicha(14, 11);
+        assertTrue(tablero.perdio());
+    }
+    
+    @Test 
+    public void jugadorTieneMasJugadasDisponibles(){
+        tablero.agregarHuecoDeInicio(1);
+        tablero.moverFicha(3, 1);
+        tablero.moverFicha(9, 2);
+        tablero.moverFicha(1, 3);
+        tablero.moverFicha(0, 9);
+        tablero.moverFicha(12, 5);
+        tablero.moverFicha(4, 2);
+        tablero.moverFicha(11, 9);
+        tablero.moverFicha(8, 6);
+        tablero.moverFicha(5,12);
+        tablero.moverFicha(2,9);
+        tablero.moverFicha(12, 5);
+        assertFalse(tablero.perdio());
     }
     /*@Test public void mostrarTableroInicial()
     {

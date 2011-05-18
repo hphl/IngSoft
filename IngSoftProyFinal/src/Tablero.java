@@ -5,43 +5,34 @@ import java.util.List;
 class Tablero {
     private int limiteFilas;
     private int limiteColumnas;
-    private boolean matrizCasillas[][];
-    List <Casilla> casillas=new ArrayList<Casilla>();
+    private Casilla matrizCasillas[][];
+    List <CoordenadaCasilla> casillas=new ArrayList<CoordenadaCasilla>();
 
     public Tablero() {
         limiteFilas=5;
         limiteColumnas=5;
-        matrizCasillas=new boolean[limiteFilas][limiteColumnas];
-        crearDatos(limiteColumnas);
+        matrizCasillas=new Casilla[limiteFilas][limiteColumnas];
+        crearCasillas(limiteColumnas);
     }
 
-    private boolean casillaEstaDentroTablero(int casilla) {
-        if(casilla<casillas.size()-1 && casilla>=0)
-            return true;
-        else
-            return false;
-    }
-
-    private void crearDatos(int limiteColumnas) {
-        for (int fila = 0; fila < limiteFilas; fila++) {
+    private void crearCasillas(int limiteColumnas) {
+        for (int fila = limiteFilas-1; fila >= 0; fila--) {
             for (int columna = 0; columna < limiteColumnas; columna++) {
-                matrizCasillas[fila][columna]=true;
-                casillas.add(new Casilla(fila,columna));
+                matrizCasillas[fila][columna]=new Casilla();
+                casillas.add(new CoordenadaCasilla(fila,columna));  
             } 
             limiteColumnas--;
         }
     }
-    
-    public int cantidadCasillasVacias()
-    {
-        int cantidadCasillasVacias=15;
-        int copiaLimiteColumnas=limiteColumnas;
-        for (int fila = 0; fila < limiteFilas; fila++) {
-            for (int columna = 0; columna < copiaLimiteColumnas; columna++) {
-                if(matrizCasillas[fila][columna])
-                    cantidadCasillasVacias--;
+   
+    public int cantidadCasillasVacias(){
+        int cantidadCasillasVacias=0;
+        for (int casilla = 0; casilla < casillas.size(); casilla++) {
+            int filaCasilla=casillas.get(casilla).obtenerFila();
+            int columnaCasilla=casillas.get(casilla).obtenerColumna();
+            if (!(matrizCasillas[filaCasilla][columnaCasilla].ocupado())) {
+                cantidadCasillasVacias++;
             }
-            copiaLimiteColumnas--;
         }
         return cantidadCasillasVacias;
     }
@@ -51,57 +42,52 @@ class Tablero {
         {
             int fila=casillas.get(huecoInicial).obtenerFila();
             int columna=casillas.get(huecoInicial).obtenerColumna();
-            matrizCasillas[fila][columna]=false;
-            casillas.get(huecoInicial).vacio();
+            matrizCasillas[fila][columna].desocupar();
             return true;
         }
         else
             return false;
     }
-
-    public boolean moverFicha(int casillaOrigen, int casillaDestino) {
-        if(casillaEstaDentroTablero(casillaOrigen) && casillaEstaDentroTablero(casillaDestino))
-        {
-            if(!casillaOcupada(casillaDestino) && casillaOcupada(casillaOrigen))
-                if(tratarDeMover(casillaOrigen,casillaDestino))
-                {
-                    casillas.get(casillaDestino).colocarNuevaFicha(casillas.get(casillaOrigen).obtenerColor());
-                    casillas.get(casillaOrigen).vacio();
-                    return true;
-                }
-        }
-        return false;
+ 
+    private boolean casillaEstaDentroTablero(int casilla) {
+        if(casilla<casillas.size() && casilla>=0)
+            return true;
+        else
+            return false;
     }
 
     public boolean casillaOcupada(int casilla) {
         int fila=casillas.get(casilla).obtenerFila();
         int columna=casillas.get(casilla).obtenerColumna();
         
-        return matrizCasillas[fila][columna];
+        return matrizCasillas[fila][columna].ocupado();
     }
 
-    private boolean tratarDeMover(int casillaOrigen, int casillaDestino) {
-        int filaOrigen=casillas.get(casillaOrigen).obtenerFila();
-        int columnaOrigen=casillas.get(casillaOrigen).obtenerColumna();
-        boolean seMovio=true;
-        Casilla destinoCasilla=casillas.get(casillaDestino);
-        if(!(moverEnFila(filaOrigen,columnaOrigen,destinoCasilla)))
+   public boolean moverFicha(int casillaOrigen, int casillaDestino) {
+        if(casillaEstaDentroTablero(casillaOrigen) && casillaEstaDentroTablero(casillaDestino))
         {
-            if(!(moverEnColumna(filaOrigen,columnaOrigen,destinoCasilla)))
+            if(!casillaOcupada(casillaDestino) && casillaOcupada(casillaOrigen))
             {
-                if(!(moverEnDiagonal(filaOrigen,columnaOrigen,destinoCasilla)))
-                    seMovio=false;             
+                if(casillas.get(casillaOrigen).moverseA(casillas.get(casillaDestino)))
+                {
+                    CoordenadaCasilla casillaAComer=casillas.get(casillaOrigen).comerFicha(casillas.get(casillaDestino));
+                    cambiarColor(casillas.get(casillaDestino),casillas.get(casillaOrigen));
+                    actualizarTablero(casillaAComer);
+                    actualizarTablero(casillas.get(casillaOrigen));
+                    actualizarTablero(casillas.get(casillaDestino));
+                    return true;
+                }
             }
         }
-        return seMovio;
+        return false;
     }
 
     String mostrarTablero() {
         String lineaNumeros="";
         String lineaColores="";
         String tablero="";
-        String espacio="  ";
-        String espacioBase="         ";
+        String espacio="";
+        String espacioBase="";
         int copiaLimiteColumnas=this.limiteColumnas-1;
         int contadorColumnaLimite=0;
         
@@ -111,13 +97,11 @@ class Tablero {
             if(numeroCasilla<9)
                 lineaNumeros+=" ";
             lineaNumeros+=numeroCasilla+1+"    ";
-            if(matrizCasillas[fila][columna])
-                lineaColores+=casillas.get(numeroCasilla).obtenerColor();
-            else
-                lineaColores+=" O    ";
+            lineaColores+=matrizCasillas[fila][columna].obtenerColor();
             if(!(numeroCasilla<copiaLimiteColumnas))
             {
-                tablero+=espacioBase+lineaColores+"\n"+espacioBase+lineaNumeros+"\n\n";
+                tablero+=espacio+espacioBase+lineaColores+"\n"+espacio +espacioBase+lineaNumeros+"\n\n";
+                espacio="  ";
                 espacioBase+=espacio;
                 contadorColumnaLimite++;
                 copiaLimiteColumnas+=this.limiteColumnas-contadorColumnaLimite;
@@ -128,79 +112,59 @@ class Tablero {
         return tablero;
     }
 
-    private boolean moverEnColumna(int filaOrigen, int columnaOrigen,Casilla casillaDestino) {
-        boolean seMovio=true;
-        if(casillaDestino.esIgual(filaOrigen+2,columnaOrigen))
-        {
-            if(matrizCasillas[filaOrigen+1][columnaOrigen])
-            {
-                matrizCasillas[filaOrigen+1][columnaOrigen]=false;
-                matrizCasillas[filaOrigen+2][columnaOrigen]=true;
-                matrizCasillas[filaOrigen][columnaOrigen]=false;
+    boolean perdio() {
+        boolean perdio=true;
+        for (int casillaOrigen = 0; casillaOrigen < casillas.size(); casillaOrigen++) {
+            for (int casillaDestino = 0; casillaDestino < casillas.size(); casillaDestino++) {
+                    if(!casillaOcupada(casillaDestino) && casillaOcupada(casillaOrigen))
+                    {
+                        if(this.tratarDeMover(casillaOrigen, casillaDestino))
+                        {
+                            perdio=false;
+                            casillaOrigen=casillas.size();
+                            casillaDestino=casillas.size();
+                        }
+                    }
             }
         }
-        else if(casillaDestino.esIgual(filaOrigen-2, columnaOrigen))
-        {
-            if(matrizCasillas[filaOrigen-1][columnaOrigen])
-            {
-                matrizCasillas[filaOrigen][columnaOrigen]=false;
-                matrizCasillas[filaOrigen-1][columnaOrigen]=false;
-                matrizCasillas[filaOrigen-2][columnaOrigen]=true;
-            }
-        }
-        else
-            seMovio=false;
-        return seMovio;
+        return perdio;
     }
 
-    private boolean moverEnFila(int filaOrigen, int columnaOrigen, Casilla destinoCasilla) {
-        boolean seMovio=true;
-        if(destinoCasilla.esIgual(filaOrigen, columnaOrigen+2))
-        {
-            if(matrizCasillas[filaOrigen][columnaOrigen+1])
-            {
-                matrizCasillas[filaOrigen][columnaOrigen]=false;
-                matrizCasillas[filaOrigen][columnaOrigen+1]=false;
-                matrizCasillas[filaOrigen][columnaOrigen+2]=true;
-            }
-        }
-        else if(destinoCasilla.esIgual(filaOrigen, columnaOrigen-2))
-        {
-            if(matrizCasillas[filaOrigen][columnaOrigen-1])
-            {
-                matrizCasillas[filaOrigen][columnaOrigen]=false;
-                matrizCasillas[filaOrigen][columnaOrigen-1]=false;
-                matrizCasillas[filaOrigen][columnaOrigen-2]=true;
-            }
-        }
+    private void actualizarTablero(CoordenadaCasilla casilla) {
+        int fila=casilla.obtenerFila();
+        int columna=casilla.obtenerColumna();
+        if(matrizCasillas[fila][columna].ocupado())
+            matrizCasillas[fila][columna].desocupar();
         else
-            seMovio=false;
-        return seMovio;
+            matrizCasillas[fila][columna].ocupar();
     }
 
-    private boolean moverEnDiagonal(int filaOrigen, int columnaOrigen, Casilla destinoCasilla) {
-        boolean seMovio=true;
-        if(destinoCasilla.esIgual(filaOrigen+2, columnaOrigen-2))
+    private void cambiarColor(CoordenadaCasilla coordenadaCasillaDestino, CoordenadaCasilla coordenadaCasillaOrigen) {
+        int filaDestino=coordenadaCasillaDestino.obtenerFila();
+        int columnaDestino=coordenadaCasillaDestino.obtenerColumna();
+        int filaOrigen=coordenadaCasillaOrigen.obtenerFila();
+        int columnaOrigen=coordenadaCasillaOrigen.obtenerColumna();
+        matrizCasillas[filaDestino][columnaDestino].cambiarColor(matrizCasillas[filaOrigen][columnaOrigen]);
+    }
+
+    private boolean tratarDeMover(int casillaOrigen, int casillaDestino) {
+        if(casillaEstaDentroTablero(casillaOrigen) && casillaEstaDentroTablero(casillaDestino))
         {
-            if(matrizCasillas[filaOrigen+1][columnaOrigen-1])
+            if(!casillaOcupada(casillaDestino) && casillaOcupada(casillaOrigen))
             {
-                matrizCasillas[filaOrigen][columnaOrigen]=false;
-                matrizCasillas[filaOrigen+1][columnaOrigen-1]=false;
-                matrizCasillas[filaOrigen+2][columnaOrigen-2]=true;
+                if(casillas.get(casillaOrigen).moverseA(casillas.get(casillaDestino)))
+                {
+                    CoordenadaCasilla coordenadaCasillaAComer=casillas.get(casillaOrigen).comerFicha(casillas.get(casillaDestino));
+                    int fila=coordenadaCasillaAComer.obtenerFila();
+                    int columna=coordenadaCasillaAComer.obtenerColumna();
+                    if(matrizCasillas[fila][columna].ocupado())
+                    {
+                        return true;
+                    }
+                }
             }
         }
-        else if(destinoCasilla.esIgual(filaOrigen-2, columnaOrigen+2))
-        {
-            if(matrizCasillas[filaOrigen-1][columnaOrigen+1])
-            {
-                matrizCasillas[filaOrigen][columnaOrigen]=false;
-                matrizCasillas[filaOrigen-1][columnaOrigen+1]=false;
-                matrizCasillas[filaOrigen-2][columnaOrigen+2]=true;
-            }
-        }
-        else
-            seMovio=false;
-        return seMovio;
+        return false;
     }
     
 }

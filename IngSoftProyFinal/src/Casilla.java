@@ -1,37 +1,14 @@
 
-
-
 class Casilla {
-    private int fila;
-    private int columna;
-    private String colorFicha="";
 
+    private boolean ocupado;
+    private String colorFicha;
+    
     public Casilla() {
-        fila=0;
-        columna=0;
-    }
-
-    public Casilla(int fila, int columna) {
-        this.fila = fila;
-        this.columna = columna;
+        ocupado=true;
         crearColor();
     }
-
-    int obtenerFila() {
-        return fila;
-    }
-
-    int obtenerColumna() {
-        return columna;
-    }
-
-    boolean esIgual(int fila, int columna) {
-        if(this.fila==fila && this.columna==columna)
-            return true;
-        else
-            return false;
-    }
-
+    
     private void crearColor() {
         int numero=0;
         do {
@@ -51,16 +28,24 @@ class Casilla {
         }
     }
 
-    String obtenerColor() {
-        return colorFicha;
+    boolean ocupado() {
+        return ocupado;
     }
 
-    void vacio() {
+    void desocupar() {
+        ocupado=false;
         colorFicha=" O    ";
     }
 
-    void colocarNuevaFicha(String nuevoColorFicha) {
-        colorFicha=nuevoColorFicha;
+    void ocupar() {
+        ocupado=true;
     }
-    
+
+    void cambiarColor(Casilla casilla) {
+        colorFicha=casilla.colorFicha;
+    }
+    String obtenerColor()
+    {
+        return colorFicha;
+    }
 }
