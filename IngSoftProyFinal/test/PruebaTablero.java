@@ -85,13 +85,55 @@ public class PruebaTablero {
     public void mostrarTableroInicialDebeSerStringDistintoAVacio()
     {
         assertNotSame("",tablero.mostrarTablero());
-        System.out.println(tablero.mostrarTablero());
+        
     }
     
     @Test 
-    public void jugadorMueveFichaValidaEnLineaRectaALaDerechaA()
+    public void jugadorMueveFichaValidaEnLineaRectaALaDerecha()
     {
-        
+        tablero.agregarHuecoDeInicio(3);
+        tablero.moverFicha(1,3);
+        assertEquals(2,tablero.cantidadCasillasVacias());
+    }
+    
+    @Test 
+    public void jugadorMueveFichaValidaEnLineaRectaALaIzquierda()
+    {
+        tablero.agregarHuecoDeInicio(1);
+        tablero.moverFicha(3,1);
+        assertEquals(2,tablero.cantidadCasillasVacias());
+    }
+    
+    @Test 
+    public void jugadorMueveFichaValidaEnDiagonalDerechaHaciaAbajo()
+    {
+        tablero.agregarHuecoDeInicio(10);
+        tablero.moverFicha(1,10);
+        assertEquals(2,tablero.cantidadCasillasVacias());
+    }
+    
+    @Test 
+    public void jugadorMueveFichaValidaEnDiagonalIzquierdaHaciaArriba()
+    {
+        tablero.agregarHuecoDeInicio(1);
+        tablero.moverFicha(10,1);
+        assertEquals(2,tablero.cantidadCasillasVacias());
+    }
+    
+    @Test 
+    public void jugadorMueveFichaValidaEnDiagonalIzquierdaHaciaAbajo()
+    {
+        tablero.agregarHuecoDeInicio(10);
+        tablero.moverFicha(3,10);
+        assertEquals(2,tablero.cantidadCasillasVacias());
+    }
+    
+    @Test 
+    public void jugadorMueveFichaValidaEnDiagonalDerechaHaciaArriba()
+    {
+        tablero.agregarHuecoDeInicio(3);
+        tablero.moverFicha(10,3);
+        assertEquals(2,tablero.cantidadCasillasVacias());
     }
     /*@Test public void mostrarTableroInicial()
     {
