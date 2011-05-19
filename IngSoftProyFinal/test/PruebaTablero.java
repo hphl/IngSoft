@@ -154,6 +154,11 @@ public class PruebaTablero {
         tablero.moverFicha(12, 5);
         assertFalse(tablero.perdio());
     }
+    @Test 
+    public void computadoraJuegaNuevoJuegoSola(){
+        tablero.agregarHuecoDeInicio(1);
+        tablero.resolverJuego();
+    }
     /*@Test public void mostrarTableroInicial()
     {
         assertEquals("1-Ocu   2-Ocu   3-Ocu   4-Ocu   5-Ocu   \n\n     6-Ocu   7-Ocu   8-Ocu   9-Ocu   \n\n        10-Ocu   11-Ocu   12-Ocu   \n\n            13-Ocu   14-Ocu   \n\n                 15-Ocu   ",tablero.mostrarTablero());

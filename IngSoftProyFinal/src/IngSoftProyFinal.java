@@ -4,7 +4,7 @@ import java.util.Scanner;
 public class IngSoftProyFinal {
 
     public static Scanner in = new Scanner(System.in);
-    public static String lineas="--------------------------------------";
+    public static String lineas="\n--------------------------------------\n";
     
     public static void main(String[] args) {
         menuPrincipal();
@@ -19,16 +19,17 @@ public class IngSoftProyFinal {
         
         while (continuar)
         {
-            System.out.println(lineas+"\n Bienvenido al Juego De Inge Del Software");
+            System.out.println(lineas+"Bienvenido al Juego De Inge Del Software");
             System.out.println("Presione 1 para iniciar nuevo juego");
-            System.out.println("Presione 2 para salir del juego\n"+lineas);
+            System.out.println("Presione 2 para salir del juego");
+            System.out.println("Presione 3 para continuar el juego"+lineas);
             option=in.next();
                 
             switch (esNumero(option))
             {
                 case 1:
                     tablero=new Tablero();
-                    System.out.println(lineas+"\nR,B,A=Ocupado\nO=Vacio\n"+tablero.mostrarTablero()+"\n"+lineas);  
+                    System.out.println(lineas+"R,B,A=Ocupado\nO=Vacio\n"+tablero.mostrarTablero()+lineas);  
                     System.out.println("para iniciar el juego debe de ingresar una posicion del tablero para que sea un vacio (ejemplo:3)");
                     numeroCasillaUno = in.next();
                     if(tablero.agregarHuecoDeInicio(esNumero(numeroCasillaUno)-1))
@@ -41,7 +42,8 @@ public class IngSoftProyFinal {
                     System.out.println("Saliendo...");
                     continuar = false;
                     break;
-                    
+                case 3:
+                    iniciarJuego(tablero);
                 default:
                     menuPrincipal();
                     break;
@@ -55,7 +57,7 @@ public class IngSoftProyFinal {
         String casillaDestino;
         String casillaOrigen;
         
-        System.out.println(lineas+"\nR,B,A=Ocupado\nO=Vacio\n"+tablero.mostrarTablero()+"\n"+lineas);  
+        System.out.println(lineas+"R,B,A=Ocupado\nO=Vacio\n"+tablero.mostrarTablero()+lineas);  
         
         while (seguirJugando)
         {
@@ -77,9 +79,9 @@ public class IngSoftProyFinal {
                     casillaDestino = in.next();
                     System.out.println(lineas);
                     if(tablero.moverFicha(esNumero(casillaOrigen)-1, esNumero(casillaDestino)-1))
-                        System.out.println("\n"+tablero.mostrarTablero()+"\nComando:"+casillaOrigen+" a "+casillaDestino+"\n"+lineas);
+                        System.out.println("\n"+tablero.mostrarTablero()+"\nComando:"+casillaOrigen+" a "+casillaDestino+lineas);
                     else
-                        System.out.println("\n"+tablero.mostrarTablero()+"\nNo se pudo ejecutar el comando:"+casillaOrigen+" a "+casillaDestino+"\n"+lineas);
+                        System.out.println("\n"+tablero.mostrarTablero()+"\nNo se pudo ejecutar el comando:"+casillaOrigen+" a "+casillaDestino+lineas);
                     if(tablero.cantidadCasillasVacias()==14)
                     {
                         System.out.println("GANASTE\n presione una tecla para volver al menu principal");

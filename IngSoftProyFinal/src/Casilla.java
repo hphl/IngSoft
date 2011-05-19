@@ -14,15 +14,15 @@ class Casilla {
         do {
             numero=(int) Math.round((Math.random()*10)); 
         } while (numero>2);
-        switch(numero+1)
+        switch(numero)
         {
-            case 1:
+            case 0:
                 colorFicha = " R    ";
                 break;
-            case 2:
+            case 1:
                 colorFicha = " B    ";
                 break;
-            case 3:
+            case 2:
                 colorFicha = " A    ";
                 break;
         }

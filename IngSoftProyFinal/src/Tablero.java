@@ -166,5 +166,9 @@ class Tablero {
         }
         return false;
     }
+
+    void resolverJuego() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
     
 }
