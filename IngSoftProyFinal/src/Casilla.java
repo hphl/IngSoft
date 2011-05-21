@@ -1,5 +1,5 @@
 
-class Casilla {
+class Casilla{
 
     private boolean ocupado;
     private String colorFicha;
@@ -8,14 +8,13 @@ class Casilla {
         ocupado=true;
         crearColor();
     }
-    
+
     private void crearColor() {
         int numero=0;
         do {
             numero=(int) Math.round((Math.random()*10)); 
         } while (numero>2);
-        switch(numero)
-        {
+        switch(numero){
             case 0:
                 colorFicha = " R    ";
                 break;
@@ -44,8 +43,19 @@ class Casilla {
     void cambiarColor(Casilla casilla) {
         colorFicha=casilla.colorFicha;
     }
-    String obtenerColor()
-    {
+    String obtenerColor(){
         return colorFicha;
+    }
+
+    void cambiarEstado() {
+        if(ocupado)
+            this.desocupar();
+        else
+            this.ocupar();
+    }
+
+    void clonar(Casilla casilla) {
+        ocupado=casilla.ocupado;
+        colorFicha=casilla.colorFicha;
     }
 }

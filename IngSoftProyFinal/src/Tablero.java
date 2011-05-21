@@ -6,8 +6,8 @@ class Tablero {
     private int limiteFilas;
     private int limiteColumnas;
     private Casilla matrizCasillas[][];
-    List <CoordenadaCasilla> casillas=new ArrayList<CoordenadaCasilla>();
-
+    private List <CoordenadaCasilla> casillas=new ArrayList<CoordenadaCasilla>();
+    
     public Tablero() {
         limiteFilas=5;
         limiteColumnas=5;
@@ -50,58 +50,68 @@ class Tablero {
     }
  
     private boolean casillaEstaDentroTablero(int casilla) {
-        if(casilla<casillas.size() && casilla>=0)
-            return true;
-        else
-            return false;
+        return (casilla<casillas.size() && casilla>=0);
     }
 
     public boolean casillaOcupada(int casilla) {
         int fila=casillas.get(casilla).obtenerFila();
-        int columna=casillas.get(casilla).obtenerColumna();
-        
+        int columna=casillas.get(casilla).obtenerColumna();       
         return matrizCasillas[fila][columna].ocupado();
     }
 
-   public boolean moverFicha(int casillaOrigen, int casillaDestino) {
-        if(casillaEstaDentroTablero(casillaOrigen) && casillaEstaDentroTablero(casillaDestino))
+   public boolean realizarJugada(int casillaOrigen, int casillaDestino) {
+        if(verificarCasillaOrigenYDestino(casillaOrigen, casillaDestino) && verificarMovimiento(casillaOrigen, casillaDestino))
         {
-            if(!casillaOcupada(casillaDestino) && casillaOcupada(casillaOrigen))
-            {
-                if(casillas.get(casillaOrigen).moverseA(casillas.get(casillaDestino)))
-                {
-                    CoordenadaCasilla casillaAComer=casillas.get(casillaOrigen).comerFicha(casillas.get(casillaDestino));
-                    cambiarColor(casillas.get(casillaDestino),casillas.get(casillaOrigen));
-                    actualizarTablero(casillaAComer);
-                    actualizarTablero(casillas.get(casillaOrigen));
-                    actualizarTablero(casillas.get(casillaDestino));
-                    return true;
-                }
-            }
+            CoordenadaCasilla casillaAComer=casillas.get(casillaOrigen).comerFicha(casillas.get(casillaDestino));
+            cambiarColor(casillas.get(casillaDestino),casillas.get(casillaOrigen));
+            actualizarTablero(casillaAComer);
+            actualizarTablero(casillas.get(casillaOrigen));
+            actualizarTablero(casillas.get(casillaDestino));
+            return true;
         }
         return false;
     }
 
-    String mostrarTablero() {
+    private String crearFilaColores(int numeroCasilla, String lineaColores) {
+        int fila=casillas.get(numeroCasilla).obtenerFila();
+        int columna=casillas.get(numeroCasilla).obtenerColumna();
+        lineaColores+=matrizCasillas[fila][columna].obtenerColor();
+        return lineaColores;
+    }
+
+    private String crearFilaNumeros(int numeroCasilla, String lineaNumeros) {
+        if(numeroCasilla<9)
+            lineaNumeros+=" ";
+        lineaNumeros+=(numeroCasilla+1)+"    ";
+        return lineaNumeros;
+    }
+
+    private boolean verificarCasillaOrigenYDestino(int casillaOrigen, int casillaDestino) {
+        if(casillaEstaDentroTablero(casillaOrigen) && casillaEstaDentroTablero(casillaDestino))
+            return (!casillaOcupada(casillaDestino) && casillaOcupada(casillaOrigen));
+        return false;
+    }
+
+    private boolean verificarMovimiento(int casillaOrigen,int casillaDestino){
+        if(casillas.get(casillaOrigen).moverseA(casillas.get(casillaDestino)))
+            return sePuedeComerFichaIntermedia(casillaOrigen, casillaDestino);
+        return false;
+    }
+    public String mostrarTablero() {
         String lineaNumeros="";
         String lineaColores="";
         String tablero="";
-        String espacio="";
+        String espacio="  ";
         String espacioBase="";
         int copiaLimiteColumnas=this.limiteColumnas-1;
         int contadorColumnaLimite=0;
         
         for (int numeroCasilla = 0; numeroCasilla < casillas.size(); numeroCasilla++) {
-            int fila=casillas.get(numeroCasilla).obtenerFila();
-            int columna=casillas.get(numeroCasilla).obtenerColumna();
-            if(numeroCasilla<9)
-                lineaNumeros+=" ";
-            lineaNumeros+=numeroCasilla+1+"    ";
-            lineaColores+=matrizCasillas[fila][columna].obtenerColor();
+            lineaColores = crearFilaColores(numeroCasilla, lineaColores);
+            lineaNumeros = crearFilaNumeros(numeroCasilla, lineaNumeros);         
             if(!(numeroCasilla<copiaLimiteColumnas))
             {
                 tablero+=espacio+espacioBase+lineaColores+"\n"+espacio +espacioBase+lineaNumeros+"\n\n";
-                espacio="  ";
                 espacioBase+=espacio;
                 contadorColumnaLimite++;
                 copiaLimiteColumnas+=this.limiteColumnas-contadorColumnaLimite;
@@ -112,31 +122,25 @@ class Tablero {
         return tablero;
     }
 
-    boolean perdio() {
-        boolean perdio=true;
+    public boolean existenMasJugadas() {
+        boolean masJugadas=false;
         for (int casillaOrigen = 0; casillaOrigen < casillas.size(); casillaOrigen++) {
             for (int casillaDestino = 0; casillaDestino < casillas.size(); casillaDestino++) {
-                    if(!casillaOcupada(casillaDestino) && casillaOcupada(casillaOrigen))
-                    {
-                        if(this.tratarDeMover(casillaOrigen, casillaDestino))
-                        {
-                            perdio=false;
-                            casillaOrigen=casillas.size();
-                            casillaDestino=casillas.size();
-                        }
-                    }
+                if(verificarCasillaOrigenYDestino(casillaOrigen, casillaDestino) && verificarMovimiento(casillaOrigen, casillaDestino))
+                {
+                    masJugadas=true;
+                    casillaOrigen=casillas.size();
+                    casillaDestino=casillas.size();
+                }
             }
         }
-        return perdio;
+        return masJugadas;
     }
 
     private void actualizarTablero(CoordenadaCasilla casilla) {
         int fila=casilla.obtenerFila();
         int columna=casilla.obtenerColumna();
-        if(matrizCasillas[fila][columna].ocupado())
-            matrizCasillas[fila][columna].desocupar();
-        else
-            matrizCasillas[fila][columna].ocupar();
+        matrizCasillas[fila][columna].cambiarEstado();
     }
 
     private void cambiarColor(CoordenadaCasilla coordenadaCasillaDestino, CoordenadaCasilla coordenadaCasillaOrigen) {
@@ -147,19 +151,34 @@ class Tablero {
         matrizCasillas[filaDestino][columnaDestino].cambiarColor(matrizCasillas[filaOrigen][columnaOrigen]);
     }
 
-    private boolean tratarDeMover(int casillaOrigen, int casillaDestino) {
-        if(casillaEstaDentroTablero(casillaOrigen) && casillaEstaDentroTablero(casillaDestino))
-        {
-            if(!casillaOcupada(casillaDestino) && casillaOcupada(casillaOrigen))
+    private boolean sePuedeComerFichaIntermedia(int casillaOrigen, int casillaDestino) {
+        CoordenadaCasilla coordenadaCasillaAComer=casillas.get(casillaOrigen).comerFicha(casillas.get(casillaDestino));
+        int fila=coordenadaCasillaAComer.obtenerFila();
+        int columna=coordenadaCasillaAComer.obtenerColumna();
+        return matrizCasillas[fila][columna].ocupado();
+    }
+
+    boolean resolverJuego() {
+        Tablero tableroACopiar=new Tablero();
+        tableroACopiar.clonar(this);
+        
+        for (int casillaOrigen = 0; casillaOrigen < casillas.size(); casillaOrigen++) {
+            for (int casillaDestino = 0; casillaDestino < casillas.size(); casillaDestino++) 
             {
-                if(casillas.get(casillaOrigen).moverseA(casillas.get(casillaDestino)))
+                if(tableroACopiar.cantidadCasillasVacias()==14)
+                    return true;
+                else if(tableroACopiar.existenMasJugadas())
                 {
-                    CoordenadaCasilla coordenadaCasillaAComer=casillas.get(casillaOrigen).comerFicha(casillas.get(casillaDestino));
-                    int fila=coordenadaCasillaAComer.obtenerFila();
-                    int columna=coordenadaCasillaAComer.obtenerColumna();
-                    if(matrizCasillas[fila][columna].ocupado())
+                    if(tableroACopiar.realizarJugada(casillaOrigen, casillaDestino))
                     {
-                        return true;
+                        if(tableroACopiar.resolverJuego())
+                        {
+                            System.out.println(tableroACopiar.mostrarTablero());
+                            System.out.println("mover de "+(casillaOrigen+1) + " a "+(casillaDestino+1));
+                            return true;
+                        }
+                        else
+                            tableroACopiar.clonar(this);
                     }
                 }
             }
@@ -167,8 +186,20 @@ class Tablero {
         return false;
     }
 
-    void resolverJuego() {
-        throw new UnsupportedOperationException("Not yet implemented");
+    private void clonar(Tablero tableroOriginal) {
+        int limiteColumnas=this.limiteColumnas;
+        for (int fila = limiteFilas-1; fila >= 0; fila--) {
+            for (int columna = 0; columna < limiteColumnas; columna++) {
+                matrizCasillas[fila][columna].clonar(tableroOriginal.matrizCasillas[fila][columna]); 
+            } 
+            limiteColumnas--;
+        }
     }
-    
+
+    /*public void vaciarTablero() {
+        for (int i = 0; i < 10; i++) {
+            
+        }
+    }*/
+ 
 }

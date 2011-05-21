@@ -1,11 +1,6 @@
 
-import java.util.ArrayList;
-import java.util.List;
 
-
-
-
-class CoordenadaCasilla {
+class CoordenadaCasilla{
     private int fila;
     private int columna;
     
@@ -27,42 +22,58 @@ class CoordenadaCasilla {
         return columna;
     }
 
-    boolean esIgual(int fila, int columna) {
-        if(this.fila==fila && this.columna==columna)
-            return true;
-        else
-            return false;
+    public boolean esIgual(int fila, int columna) {
+        return (this.fila==fila && this.columna==columna);
     }
 
-    boolean moverseA(CoordenadaCasilla coordenadaCasillaDestino) {
-        if(this.comerFicha(coordenadaCasillaDestino)!= null)
-            return true;
-        else
-            return false;
-            
+    public boolean moverseA(CoordenadaCasilla coordenadaCasillaDestino) {
+        return (this.comerFicha(coordenadaCasillaDestino)!= null);          
     }
 
-    CoordenadaCasilla comerFicha(CoordenadaCasilla coordenadaCasillaDestino) {
-        if(coordenadaCasillaDestino.esIgual(fila+2, columna))
+    public CoordenadaCasilla comerFicha(CoordenadaCasilla coordenadaCasillaDestino) {//refactorizar
+        if(moverHaciaArribaEnDiagonalIzquierda( coordenadaCasillaDestino))
             return new CoordenadaCasilla(fila+1,columna);
                 
-        else if(coordenadaCasillaDestino.esIgual(fila-2, columna))
+        else if(moverHaciaAbajoEnDiagonalDerecha( coordenadaCasillaDestino))
             return new CoordenadaCasilla(fila-1,columna);
                 
-        else if(coordenadaCasillaDestino.esIgual(fila,columna+2))
+        else if(moverHaciaDerechaRecto(coordenadaCasillaDestino))
             return new CoordenadaCasilla(fila,columna+1);
                 
-        else if(coordenadaCasillaDestino.esIgual(fila, columna-2))
+        else if(moverIzquierdaRecto(coordenadaCasillaDestino))
             return new CoordenadaCasilla(fila,columna-1);
                 
-        else if(coordenadaCasillaDestino.esIgual(fila+2, columna+2))
+        else if(moverHaciaArribaEnDiagonalDerecha(coordenadaCasillaDestino))
             return new CoordenadaCasilla(fila+1,columna+1);
                 
-        else if(coordenadaCasillaDestino.esIgual(fila-2, columna-2))
-            return new CoordenadaCasilla(fila-1,columna-1);
-                
+        else if(moverHaciaAbajoEnDiagonalIzquierda(coordenadaCasillaDestino))
+            return new CoordenadaCasilla(fila-1,columna-1);               
         else
             return null;
+    }
+
+    private boolean moverHaciaAbajoEnDiagonalIzquierda(CoordenadaCasilla coordenadaCasillaDestino) {
+        return coordenadaCasillaDestino.esIgual(fila-2, columna-2);
+    }
+
+    private boolean moverHaciaArribaEnDiagonalDerecha(CoordenadaCasilla coordenadaCasillaDestino) {
+        return coordenadaCasillaDestino.esIgual(fila+2, columna+2);
+    }
+
+    private boolean moverIzquierdaRecto(CoordenadaCasilla coordenadaCasillaDestino) {
+        return coordenadaCasillaDestino.esIgual(fila, columna-2);
+    }
+
+    private boolean moverHaciaDerechaRecto(CoordenadaCasilla coordenadaCasillaDestino) {
+        return coordenadaCasillaDestino.esIgual(fila,columna+2);
+    }
+
+    private boolean moverHaciaAbajoEnDiagonalDerecha(CoordenadaCasilla coordenadaCasillaDestino) {
+        return coordenadaCasillaDestino.esIgual(fila-2, columna);
+    }
+
+    private boolean moverHaciaArribaEnDiagonalIzquierda(CoordenadaCasilla coordenadaCasillaDestino) {
+        return coordenadaCasillaDestino.esIgual(fila+2, columna);
     }
     
 }

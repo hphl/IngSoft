@@ -44,8 +44,8 @@ public class IngSoftProyFinal {
                     break;
                 case 3:
                     iniciarJuego(tablero);
+                    break;
                 default:
-                    menuPrincipal();
                     break;
         }
     }
@@ -78,21 +78,21 @@ public class IngSoftProyFinal {
                     System.out.print("\nIngrese la casilla destino: ");
                     casillaDestino = in.next();
                     System.out.println(lineas);
-                    if(tablero.moverFicha(esNumero(casillaOrigen)-1, esNumero(casillaDestino)-1))
+                    if(tablero.realizarJugada(esNumero(casillaOrigen)-1, esNumero(casillaDestino)-1))
                         System.out.println("\n"+tablero.mostrarTablero()+"\nComando:"+casillaOrigen+" a "+casillaDestino+lineas);
                     else
                         System.out.println("\n"+tablero.mostrarTablero()+"\nNo se pudo ejecutar el comando:"+casillaOrigen+" a "+casillaDestino+lineas);
                     if(tablero.cantidadCasillasVacias()==14)
                     {
-                        System.out.println("GANASTE\n presione una tecla para volver al menu principal");
+                        System.out.println("GANASTE\n PRESIONE UNA TECLA PARA VOLVER AL MENU PRINCIPAL");
                         casillaOrigen=in.next();
                         seguirJugando=false;
                     }
                     else
                     {
-                        if(tablero.perdio())
+                        if(!(tablero.existenMasJugadas()))
                         {
-                            System.out.println("PERDISTE\n presione una tecla para volver al menu principal");
+                            System.out.println("NO EXISTEN MAS JUGADAS\n PRESIONE UNA TECLA PARA VOLVER AL MENU PRINCIPAL");
                             casillaOrigen=in.next();
                             seguirJugando=false;
                         }
