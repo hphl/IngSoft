@@ -11,30 +11,38 @@
     <description>Builds, tests, and runs the project IngSoftProyFinal.</description>
     <import file="nbproject/build-impl.xml"/>
 	
-	<target name="init">
+	<target name="iniciar">
 		<mkdir dir="build/classes" />
 		<mkdir dir="dist" />
 	</target>
 
-	<target name="compile" depends="init">
+	<target name="compilar" depends="iniciar">
 		<javac srcdir="src" destdir="build/classes" includeantruntime="false"/>
+                <echo message="compilando el proyecto" /> 
+
 	</target>
 	
-	<target name="compress" depends="compile">
+	<target name="crear_jar" depends="compilar">
 	        <jar destfile="dist/IngSoft.jar" basedir="build/classes" />
+                <echo message="creando el archivo IngSoft.jar" /> 
+
 	</target>
 	
-	<target name="execute" depends="compile">
+	<target name="ejecutar" depends="compilar">
 		<java classname="Menu" classpath="build/classes" />
+                <echo message="ejecutando el programa.." /> 
+
 	</target>
 
-	<target name="clean">
+	<target name="limpiar">
 		<delete dir="build" />
 		<delete dir="dist" />
+                <echo message="eliminando las carpetas build y dist" /> 
 	</target>
-        
+        <!--
+        <target name="" >
 	
-    <!--
+    
 
     There exist several targets which are by default empty and which can be 
     used for execution of your tasks. These targets are usually executed 
