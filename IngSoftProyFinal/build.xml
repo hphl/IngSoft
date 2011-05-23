@@ -10,6 +10,30 @@
 <project name="IngSoftProyFinal" default="default" basedir=".">
     <description>Builds, tests, and runs the project IngSoftProyFinal.</description>
     <import file="nbproject/build-impl.xml"/>
+	
+	<target name="init">
+		<mkdir dir="build/classes" />
+		<mkdir dir="dist" />
+	</target>
+
+	<target name="compile" depends="init">
+		<javac srcdir="src" destdir="build/classes" includeantruntime="false"/>
+	</target>
+	
+	<target name="compress" depends="compile">
+	        <jar destfile="dist/IngSoft.jar" basedir="build/classes" />
+	</target>
+	
+	<target name="execute" depends="compile">
+		<java classname="Menu" classpath="build/classes" />
+	</target>
+
+	<target name="clean">
+		<delete dir="build" />
+		<delete dir="dist" />
+	</target>
+        
+	
     <!--
 
     There exist several targets which are by default empty and which can be 
