@@ -15,6 +15,10 @@ class Tablero {
         crearCasillas(limiteColumnas);
     }
 
+    public boolean ganarJuego() {
+        return (cantidadCasillasVacias()==casillas.size()-1);
+    }
+
     private void crearCasillas(int limiteColumnas) {
         for (int fila = limiteFilas-1; fila >= 0; fila--) {
             for (int columna = 0; columna < limiteColumnas; columna++) {
@@ -38,8 +42,7 @@ class Tablero {
     }
 
     public boolean agregarHuecoDeInicio(int huecoInicial) {
-        if(casillaEstaDentroTablero(huecoInicial))
-        {
+        if(casillaEstaDentroTablero(huecoInicial)){
             int fila=casillas.get(huecoInicial).obtenerFila();
             int columna=casillas.get(huecoInicial).obtenerColumna();
             matrizCasillas[fila][columna].desocupar();
@@ -60,8 +63,7 @@ class Tablero {
     }
 
    public boolean realizarJugada(int casillaOrigen, int casillaDestino) {
-        if(verificarCasillaOrigenYDestino(casillaOrigen, casillaDestino) && verificarMovimiento(casillaOrigen, casillaDestino))
-        {
+        if(verificarCasillaOrigenYDestino(casillaOrigen, casillaDestino) && verificarMovimiento(casillaOrigen, casillaDestino)){
             CoordenadaCasilla casillaAComer=casillas.get(casillaOrigen).comerFicha(casillas.get(casillaDestino));
             cambiarColor(casillas.get(casillaDestino),casillas.get(casillaOrigen));
             actualizarTablero(casillaAComer);
@@ -109,8 +111,7 @@ class Tablero {
         for (int numeroCasilla = 0; numeroCasilla < casillas.size(); numeroCasilla++) {
             lineaColores = crearFilaColores(numeroCasilla, lineaColores);
             lineaNumeros = crearFilaNumeros(numeroCasilla, lineaNumeros);         
-            if(!(numeroCasilla<copiaLimiteColumnas))
-            {
+            if(!(numeroCasilla<copiaLimiteColumnas)){
                 tablero+=espacio+espacioBase+lineaColores+"\n"+espacio +espacioBase+lineaNumeros+"\n\n";
                 espacioBase+=espacio;
                 contadorColumnaLimite++;
@@ -158,7 +159,7 @@ class Tablero {
         return matrizCasillas[fila][columna].ocupado();
     }
 
-    boolean resolverJuego() {
+    /*Tablero resolverJuego() {
         Tablero tableroACopiar=new Tablero();
         tableroACopiar.clonar(this);
         
@@ -166,16 +167,15 @@ class Tablero {
             for (int casillaDestino = 0; casillaDestino < casillas.size(); casillaDestino++) 
             {
                 if(tableroACopiar.cantidadCasillasVacias()==14)
-                    return true;
-                else if(tableroACopiar.existenMasJugadas())
-                {
-                    if(tableroACopiar.realizarJugada(casillaOrigen, casillaDestino))
-                    {
-                        if(tableroACopiar.resolverJuego())
+                    return tableroACopiar;
+                else if(tableroACopiar.existenMasJugadas()){
+                    if(tableroACopiar.realizarJugada(casillaOrigen, casillaDestino)){
+                        tableroACopiar=tableroACopiar.resolverJuego();
+                        if(tableroACopiar.cantidadCasillasVacias()==14)
                         {
                             System.out.println(tableroACopiar.mostrarTablero());
                             System.out.println("mover de "+(casillaOrigen+1) + " a "+(casillaDestino+1));
-                            return true;
+                            return tableroACopiar;
                         }
                         else
                             tableroACopiar.clonar(this);
@@ -183,23 +183,57 @@ class Tablero {
                 }
             }
         }
-        return false;
+        return tableroACopiar;
+    }*/
+ 
+    String resolverJuego(Tablero tableroConJugada) {
+        String mostrarJugadasParaResolverElJuego="";
+        Tablero tableroCopiaDelOriginal=new Tablero();
+        tableroCopiaDelOriginal.clonar(this);
+        
+        for (int casillaOrigen = 0; casillaOrigen < casillas.size(); casillaOrigen++) {
+            for (int casillaDestino = 0; casillaDestino < casillas.size(); casillaDestino++) {
+                if(tableroCopiaDelOriginal.ganarJuego())
+                    return "Juego Terminado";
+                else if(tableroCopiaDelOriginal.existenMasJugadas()){
+                    if(tableroCopiaDelOriginal.realizarJugada(casillaOrigen, casillaDestino)){
+                        tableroConJugada.clonar(tableroCopiaDelOriginal);
+                        mostrarJugadasParaResolverElJuego=tableroCopiaDelOriginal.resolverJuego(tableroConJugada);
+                        if(tableroConJugada.ganarJuego()){
+                            mostrarJugadasParaResolverElJuego=this.mostrarTablero()+"mover de "+(casillaOrigen+1)+" a "+(casillaDestino+1)+"\n\n"+tableroCopiaDelOriginal.mostrarTablero()+"\n---------------------------\n"+mostrarJugadasParaResolverElJuego;
+                            return mostrarJugadasParaResolverElJuego;
+                        }
+                        else
+                            tableroCopiaDelOriginal.clonar(this);
+                    }
+                }
+            }
+        }
+        return "No se  puede resolver el juego...";
     }
-
-    private void clonar(Tablero tableroOriginal) {
-        int limiteColumnas=this.limiteColumnas;
+       
+    public void clonar(Tablero tableroOriginal) {
+        int copiaLimiteColumnas=this.limiteColumnas;
         for (int fila = limiteFilas-1; fila >= 0; fila--) {
-            for (int columna = 0; columna < limiteColumnas; columna++) {
+            for (int columna = 0; columna < copiaLimiteColumnas; columna++) {
                 matrizCasillas[fila][columna].clonar(tableroOriginal.matrizCasillas[fila][columna]); 
             } 
-            limiteColumnas--;
+            copiaLimiteColumnas--;
         }
     }
 
-    /*public void vaciarTablero() {
-        for (int i = 0; i < 10; i++) {
-            
+    public boolean terminoJuego(){
+        if(!ganarJuego())
+            return (!existenMasJugadas());
+        else
+            return true;
+    }
+    public void vaciarTablero() {
+        for (int casilla = 0; casilla < casillas.size(); casilla++) {
+            int fila=casillas.get(casilla).obtenerFila();
+            int columna=casillas.get(casilla).obtenerColumna();
+            matrizCasillas[fila][columna].desocupar();
         }
-    }*/
+    }
  
 }

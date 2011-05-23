@@ -144,6 +144,21 @@ public class PruebaTablero {
         assertFalse(tablero.realizarJugada(7,3));
     }
      
+    @Test
+    public void jugadorRealizaJugadaValidaYLuegoUnaJugadaInvalidaDebeDeHaberDosCasillasVacias(){
+        tablero.agregarHuecoDeInicio(1);
+        tablero.realizarJugada(3, 1);
+        tablero.realizarJugada(4, 2);
+        assertEquals(tablero.cantidadCasillasVacias(),2);
+    }
+    
+    @Test
+    public void jugadorRealizaJugadaInvalidaPorqueNoHayFichaQueComerNoDebeRealizarLaJugada(){
+        tablero.agregarHuecoDeInicio(1);
+        tablero.realizarJugada(3, 1);
+        assertFalse(tablero.realizarJugada(4, 2));
+    }
+    
     @Test 
     public void mostrarTableroInicialDebeSerStringDistintoAVacio(){
         assertNotSame("",tablero.mostrarTablero());
@@ -168,7 +183,7 @@ public class PruebaTablero {
     }
     
     @Test 
-    public void jugadorTieneMasJugadasDisponiblesDebeDevolverFalse(){
+    public void jugadorTieneMasJugadasDisponiblesJuegoNoTermino(){
         tablero.agregarHuecoDeInicio(1);
         tablero.realizarJugada(3, 1);
         tablero.realizarJugada(9, 2);
@@ -181,18 +196,56 @@ public class PruebaTablero {
         tablero.realizarJugada(5,12);
         tablero.realizarJugada(2,9);
         tablero.realizarJugada(12, 5);
-        assertTrue(tablero.existenMasJugadas());
+        assertFalse(tablero.terminoJuego());
     }
     
     @Test 
-    public void computadoraJuegaNuevoJuegoSolaDebeGanar(){
+    public void jugadorTieneMasJugadasDisponiblesJugadorNodebeGanar(){
+        tablero.agregarHuecoDeInicio(1);
+        tablero.realizarJugada(3, 1);
+        tablero.realizarJugada(9, 2);
+        tablero.realizarJugada(1, 3);
+        tablero.realizarJugada(0, 9);
+        tablero.realizarJugada(12, 5);
+        tablero.realizarJugada(4, 2);
+        tablero.realizarJugada(11, 9);
+        tablero.realizarJugada(8, 6);
+        tablero.realizarJugada(5,12);
+        tablero.realizarJugada(2,9);
+        tablero.realizarJugada(12, 5);
+        assertFalse(tablero.ganarJuego());
+    }
+     
+    @Test 
+    public void computadoraJuegaNuevoJuegoSolaDebeHaberCatorceCasillasVaciasEnElTablero(){
         tablero.agregarHuecoDeInicio(0);
-        assertTrue(tablero.resolverJuego());
-        System.out.println(tablero.mostrarTablero());
+        Tablero copiaDeltableroOriginal=new Tablero();
+        copiaDeltableroOriginal.clonar(tablero);
+        System.out.println(tablero.resolverJuego(copiaDeltableroOriginal));
+        assertEquals(14,copiaDeltableroOriginal.cantidadCasillasVacias());
     }
     
     @Test 
-    public void jugadorGanaJuegoDebeHaberCatorceCasillasVacias(){
+    public void computadoraGanaJuegoDebeDevolverTrue(){
+        tablero.agregarHuecoDeInicio(0);
+        Tablero copiaDeltableroOriginal=new Tablero();
+        copiaDeltableroOriginal.clonar(tablero);
+        tablero.resolverJuego(copiaDeltableroOriginal);
+        assertTrue(copiaDeltableroOriginal.ganarJuego());
+    }
+    
+    @Test 
+    public void jugadorRealizaUnaJugadaYComputadoraDebeDePoderContinuarJugando(){
+        tablero.agregarHuecoDeInicio(1);
+        tablero.realizarJugada(3, 1);
+        Tablero copiaDeltableroOriginal=new Tablero();
+        copiaDeltableroOriginal.clonar(tablero);
+        tablero.resolverJuego(copiaDeltableroOriginal);
+        assertTrue(copiaDeltableroOriginal.terminoJuego());
+    }
+    
+    @Test 
+    public void jugadorGanaJuegoDebeHaberCatorceCasillasVaciasEnElTablero(){
         tablero.agregarHuecoDeInicio(1);
         tablero.realizarJugada(3, 1);
         tablero.realizarJugada(0, 2);
@@ -210,17 +263,83 @@ public class PruebaTablero {
         assertEquals(14,tablero.cantidadCasillasVacias());
     }
     
-    /*@Test 
-    public void tableroSinFichasDebeMostrarVacio(){
-        tablero.vaciarTablero();
-        assertEquals(tablero.mostrarTablero(),"");
-    }*/
+    @Test 
+    public void jugadorGanaJuegoDebeGanar(){
+        tablero.agregarHuecoDeInicio(1);
+        tablero.realizarJugada(3, 1);
+        tablero.realizarJugada(0, 2);
+        tablero.realizarJugada(10, 1);
+        tablero.realizarJugada(1, 3);
+        tablero.realizarJugada(4, 2);
+        tablero.realizarJugada(8, 6);
+        tablero.realizarJugada(5, 7);
+        tablero.realizarJugada(12, 5);
+        tablero.realizarJugada(13, 8);
+        tablero.realizarJugada(8, 6);
+        tablero.realizarJugada(2, 9);
+        tablero.realizarJugada(5, 12);
+        tablero.realizarJugada(14, 9);
+        assertTrue(tablero.ganarJuego());
+    }
     
-    /*@Test 
-    public void mostrarTableroInicial()
-    {
-        assertEquals("1-Ocu   2-Ocu   3-Ocu   4-Ocu   5-Ocu   \n\n     6-Ocu   7-Ocu   8-Ocu   9-Ocu   \n\n        10-Ocu   11-Ocu   12-Ocu   \n\n            13-Ocu   14-Ocu   \n\n                 15-Ocu   ",tablero.mostrarTablero());
-        System.out.println(tablero.mostrarTablero());
-    }*/
+    @Test 
+    public void jugadorNoTieneMasJugadasDisponiblesJuegoTermino(){
+        tablero.agregarHuecoDeInicio(1);
+        tablero.realizarJugada(3, 1);
+        tablero.realizarJugada(9, 2);
+        tablero.realizarJugada(1, 3);
+        tablero.realizarJugada(0, 9);
+        tablero.realizarJugada(12, 5);
+        tablero.realizarJugada(4, 2);
+        tablero.realizarJugada(11, 9);
+        tablero.realizarJugada(8, 6);
+        tablero.realizarJugada(5,12);
+        tablero.realizarJugada(2,9);
+        tablero.realizarJugada(12, 5);
+        tablero.realizarJugada(14, 11);
+        assertTrue(tablero.terminoJuego());
+    }
+    
+    @Test 
+    public void jugadorGanaElDebeJuegoTerminar(){
+        tablero.agregarHuecoDeInicio(1);
+        tablero.realizarJugada(3, 1);
+        tablero.realizarJugada(0, 2);
+        tablero.realizarJugada(10, 1);
+        tablero.realizarJugada(1, 3);
+        tablero.realizarJugada(4, 2);
+        tablero.realizarJugada(8, 6);
+        tablero.realizarJugada(5, 7);
+        tablero.realizarJugada(12, 5);
+        tablero.realizarJugada(13, 8);
+        tablero.realizarJugada(8, 6);
+        tablero.realizarJugada(2, 9);
+        tablero.realizarJugada(5, 12);
+        tablero.realizarJugada(14, 9);
+        assertTrue(tablero.terminoJuego());
+    }
+    
+    @Test 
+    public void tableroEsClonadoEnTableroCopiaAmbosDebenSerIguales(){
+        tablero.agregarHuecoDeInicio(0);
+        Tablero tableroCopia=new Tablero();
+        tableroCopia.clonar(tablero);
+        assertEquals(tablero.mostrarTablero(),tableroCopia.mostrarTablero());
+    }
+    
+    @Test 
+    public void tableroEsClonadoEnTableroCopiaYLuegoTableroRealizaMovimientoValidoAmbosNoDebenSerIguales(){
+        tablero.agregarHuecoDeInicio(1);
+        Tablero tableroCopia=new Tablero();
+        tableroCopia.clonar(tablero);
+        tablero.realizarJugada(3, 1);
+        assertNotSame(tableroCopia.mostrarTablero(),tablero.mostrarTablero());
+    }
+    
+    @Test 
+    public void tableroSinFichasDebeMostrarTodasLasCasillasVacias(){
+        tablero.vaciarTablero();
+        assertEquals(tablero.mostrarTablero(),"   O     O     O     O     O    \n   1     2     3     4     5    \n\n     O     O     O     O    \n     6     7     8     9    \n\n       O     O     O    \n      10    11    12    \n\n         O     O    \n        13    14    \n\n           O    \n          15    \n\n");
+    }
        
 }

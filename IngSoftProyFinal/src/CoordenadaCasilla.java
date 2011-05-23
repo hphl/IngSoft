@@ -30,7 +30,7 @@ class CoordenadaCasilla{
         return (this.comerFicha(coordenadaCasillaDestino)!= null);          
     }
 
-    public CoordenadaCasilla comerFicha(CoordenadaCasilla coordenadaCasillaDestino) {//refactorizar
+    public CoordenadaCasilla comerFicha(CoordenadaCasilla coordenadaCasillaDestino) {
         if(moverHaciaArribaEnDiagonalIzquierda( coordenadaCasillaDestino))
             return new CoordenadaCasilla(fila+1,columna);
                 
