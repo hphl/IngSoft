@@ -221,7 +221,7 @@ public class PruebaTablero {
         tablero.agregarHuecoDeInicio(0);
         Tablero copiaDeltableroOriginal=new Tablero();
         copiaDeltableroOriginal.clonar(tablero);
-        System.out.println(tablero.resolverJuego(copiaDeltableroOriginal));
+        System.out.println(tablero.mostrarTablero()+tablero.resolverJuego(copiaDeltableroOriginal));
         assertEquals(14,copiaDeltableroOriginal.cantidadCasillasVacias());
     }
     
