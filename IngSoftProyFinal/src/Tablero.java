@@ -159,33 +159,6 @@ class Tablero {
         return matrizCasillas[fila][columna].ocupado();
     }
 
-    /*Tablero resolverJuego() {
-        Tablero tableroACopiar=new Tablero();
-        tableroACopiar.clonar(this);
-        
-        for (int casillaOrigen = 0; casillaOrigen < casillas.size(); casillaOrigen++) {
-            for (int casillaDestino = 0; casillaDestino < casillas.size(); casillaDestino++) 
-            {
-                if(tableroACopiar.cantidadCasillasVacias()==14)
-                    return tableroACopiar;
-                else if(tableroACopiar.existenMasJugadas()){
-                    if(tableroACopiar.realizarJugada(casillaOrigen, casillaDestino)){
-                        tableroACopiar=tableroACopiar.resolverJuego();
-                        if(tableroACopiar.cantidadCasillasVacias()==14)
-                        {
-                            System.out.println(tableroACopiar.mostrarTablero());
-                            System.out.println("mover de "+(casillaOrigen+1) + " a "+(casillaDestino+1));
-                            return tableroACopiar;
-                        }
-                        else
-                            tableroACopiar.clonar(this);
-                    }
-                }
-            }
-        }
-        return tableroACopiar;
-    }*/
- 
     String resolverJuego(Tablero tableroConJugada) {
         String mostrarJugadasParaResolverElJuego="";
         Tablero tableroCopiaDelOriginal=new Tablero();
@@ -200,16 +173,22 @@ class Tablero {
                         tableroConJugada.clonar(tableroCopiaDelOriginal);
                         mostrarJugadasParaResolverElJuego=tableroCopiaDelOriginal.resolverJuego(tableroConJugada);
                         if(tableroConJugada.ganarJuego()){
-                            mostrarJugadasParaResolverElJuego=this.mostrarTablero()+"mover de "+(casillaOrigen+1)+" a "+(casillaDestino+1)+"\n\n"+tableroCopiaDelOriginal.mostrarTablero()+"\n---------------------------\n"+mostrarJugadasParaResolverElJuego;
+                            mostrarJugadasParaResolverElJuego="mover de "+(casillaOrigen+1)+" a "+(casillaDestino+1)+"\n\n"+tableroCopiaDelOriginal.mostrarTablero()+mostrarJugadasParaResolverElJuego;
                             return mostrarJugadasParaResolverElJuego;
+                            
                         }
-                        else
+                        else{
+                            mostrarJugadasParaResolverElJuego="mover de "+(casillaOrigen+1)+" a "+(casillaDestino+1)+"\n\n"+tableroCopiaDelOriginal.mostrarTablero()+mostrarJugadasParaResolverElJuego;
                             tableroCopiaDelOriginal.clonar(this);
+                        }
                     }
                 }
             }
         }
-        return "No se  puede resolver el juego...";
+        if(tableroConJugada.cantidadCasillasVacias()==this.cantidadCasillasVacias())
+            return "No se  existen mas jugadas...";
+        else 
+            return mostrarJugadasParaResolverElJuego;
     }
        
     public void clonar(Tablero tableroOriginal) {

@@ -72,7 +72,7 @@ public class Menu {
 
                 case 98:
                     System.out.println("Resolviendo, Espere porfavor ...");
-                    System.out.println(tablero.resolverJuego(new Tablero()));
+                    System.out.println(tablero.mostrarTablero()+tablero.resolverJuego(new Tablero()));
                     System.out.println("PRESIONE UNA TECLA PARA VOLVER AL MENU PRINCIPAL");
                     casillaOrigen = in.next();
                     seguirJugando = false;
